@@ -1,6 +1,6 @@
-# filmAffinity to LetterBoxd
+# filmAffinity to Letterboxd
 
-Generates csv file compatible with LetterBoxd diary importer from Filmaffinity user's data given their id.
+Generates csv file compatible with Letterboxd diary importer from Filmaffinity user's data given their id.
 
 ## How to get your id
 
