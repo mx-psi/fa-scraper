@@ -1,8 +1,10 @@
 # filmAffinity to Letterboxd
 
+(_[Versión en español](README\_es.md)_)
+
 Generates CSV file compatible with [Letterboxd diary importer](https://letterboxd.com/about/importing-data/) from FilmAffinity user's data given their ID.
 
-_This program is intended for personal use only; please ensure the person you are getting the data from consents to it beforehand and check which privacy and data protection regulations might apply before using the program._
+_This program is intended for personal use only; please ensure the person you are getting the data from consents to it beforehand and check which privacy and data protection regulations might apply before using the program to get data from other people._
 
 ## Getting your IDs
 
