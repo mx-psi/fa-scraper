@@ -1,42 +1,53 @@
 # filmAffinity to Letterboxd
 
-Generates csv file compatible with Letterboxd diary importer from Filmaffinity user's data given their id.
+Generates CSV file compatible with [Letterboxd diary importer](https://letterboxd.com/about/importing-data/) from FilmAffinity user's data given their ID.
 
-## How to get your user id
+_This program is intended for personal use only; please ensure the person you are getting the data from consents to it beforehand and check which privacy and data protection regulations might apply before using the program._
 
-Go to your profile page and copy the `user_id` field from the url:
+## Getting your IDs
 
-`https://www.filmaffinity.com/es/userratings.php?user_id=`**XXXXXX**
+In order to get your FilmAffinity data you need to find out what your FilmAffinity ID is.
+There are different IDs for your user ratings and your lists.
 
-## How to get your list id
+### How to get your user id
 
-Go to the list pages (in the left menu), and access the list you want (need to be public).
+Go to your profile page and copy the `user_id` field from the URL:
 
-You need to copy the `list_id` field from the url:
+`filmaffinity.com/es/userratings.php?user_id=`**XXXXXX**
 
-`https://www.filmaffinity.com/es/mylist.php?list_id=`**XXXXXX**
+### How to get your list id
+
+Go to the list pages (in the left menu), and access the list you want (it needs to be public).
+
+You need to copy the `list_id` field from the URL:
+
+`filmaffinity.com/es/mylist.php?list_id=`**XXXXXX**
 
 ## Running the script
 
-You need to have [Python 3](https://www.python.org/downloads), [BeautifulSoup 4](https://www.crummy.com/software/BeautifulSoup/bs4/doc/#installing-beautiful-soup), [requests](https://requests.readthedocs.io/en/master/) and [lxml](https://lxml.de/) installed. Once installed just run:
+### Locally
 
-``` sh
+You need to have [Python 3](https://www.python.org/downloads), [BeautifulSoup 4](https://www.crummy.com/software/BeautifulSoup/bs4/doc/#installing-beautiful-soup), [requests](https://requests.readthedocs.io/en/master/) and [lxml](https://lxml.de/) installed. Once installed, run:
+
+```sh
 ./faScrap.py [--csv FILE] [--lang LANG] id
 ```
 
-### With docker
+### With Docker
 
-First of all you need to have docker installed, and latter you have to run this simple steps
+You need to install Docker. Once installed, run:
 
-You need to replace `USER_ID` with your current user id
+```sh
+docker run --name fa-letterboxd fa-letterboxd python3 faScrap.py id
+docker cp fa-letterboxd:/*.csv .
+docker rm fa-letterboxd`
+```
 
-`docker run --name fa-letterboxd fa-letterboxd python3 faScrap.py --lang en --csv fa-to-lbx.csv USER_ID && docker cp fa-letterboxd:/fa-to-lbx.csv . && docker rm fa-letterboxd`
+### Options
 
-## Options
-
-- `--list LIST` The id of the public list you wanna export, if is available export the list and not your ratings
-- `--csv FILE` sets csv export file name to `FILE`
-- `--lang LANG` sets language to `LANG`. Letterboxd importer works best with english, the default option.
+- `--list LIST` sets ID of the public list you want to export
+- `--csv FILE` sets CSV export file name to `FILE`
+- `--lang LANG` sets language to `LANG`. Letterboxd importer works best in English, the default option.
 
 ## Troubleshooting
 
