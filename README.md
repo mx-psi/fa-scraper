@@ -50,7 +50,7 @@ You need to have [Python 3](https://www.python.org/downloads),
 You need to install Docker. Once installed, run:
 
 ```sh
-docker run --name fa-letterboxd fa-letterboxd python3 faScrap.py id
+docker run --name fa-letterboxd fa-letterboxd python3 fa-scrapper.py id
 docker cp fa-letterboxd:/*.csv .
 docker rm fa-letterboxd`
 ```
