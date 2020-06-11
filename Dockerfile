@@ -12,4 +12,4 @@ COPY Pipfile /
 # Install dependencies
 RUN pip3 install pipenv && pipenv lock && pipenv install --system
 
-COPY faScrap.py /
+COPY fa-scrapper.py /
