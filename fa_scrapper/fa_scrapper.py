@@ -15,14 +15,12 @@
 #
 
 import csv
-
-from datetime import datetime
-import platform
 import locale
+import platform
+from datetime import datetime
 
-import requests
 import bs4
-
+import requests
 
 # FilmAffinity root URL
 FA_ROOT_URL = "https://www.filmaffinity.com/{lang}/"
