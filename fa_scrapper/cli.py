@@ -2,8 +2,10 @@ import argparse
 import locale
 import sys
 
-from .fa_scrapper import (get_list_data, get_profile_data, save_to_csv,
-                          set_locale)
+from .fa_scrapper import get_list_data
+from .fa_scrapper import get_profile_data
+from .fa_scrapper import save_to_csv
+from .fa_scrapper import set_locale
 
 __version__ = "0.1.0"
 
