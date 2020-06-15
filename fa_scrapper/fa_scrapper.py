@@ -45,10 +45,10 @@ def get_date(tag, lang):
     """Gets date from tag (format YYYY-MM-DD)"""
 
     if lang == "es":
-        date_str = tag.string[len("Votada el día: "):].strip()
+        date_str = tag.string[len("Votada el día: ") :].strip()
         fecha = datetime.strptime(date_str, "%d de %B de %Y").date()
     else:
-        date_str = tag.string[len("Rated on "):].strip()
+        date_str = tag.string[len("Rated on ") :].strip()
         fecha = datetime.strptime(date_str, "%B %d, %Y").date()
 
     return fecha.strftime("%Y-%m-%d")
