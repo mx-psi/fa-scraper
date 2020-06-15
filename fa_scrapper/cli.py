@@ -1,7 +1,9 @@
-import sys
 import argparse
 import locale
-from .fa_scrapper import set_locale, get_list_data, get_profile_data, save_to_csv
+import sys
+
+from .fa_scrapper import (get_list_data, get_profile_data, save_to_csv,
+                          set_locale)
 
 __version__ = "0.1.0"
 
