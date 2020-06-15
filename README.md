@@ -15,7 +15,8 @@ from other people._
 
 ### Using `pip`
 
-You can install `fa-scrapper` using `pip` ([Python 3.5+](https://www.python.org/)):
+You can install `fa-scrapper` using `pip`
+([Python 3.5+](https://www.python.org/)):
 
 ```sh
 pip install fa-scrapper
