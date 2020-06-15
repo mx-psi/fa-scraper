@@ -1,16 +1,20 @@
 repos:
--   repo: https://github.com/ambv/black
+  - repo: https://github.com/ambv/black
     rev: stable
     hooks:
-    - id: black
--   repo: https://gitlab.com/pycqa/flake8
+      - id: black
+  - repo: https://gitlab.com/pycqa/flake8
     rev: 3.8.2
     hooks:
-    - id: flake8
--   repo: https://github.com/pre-commit/pre-commit-hooks
+      - id: flake8
+  - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v1.2.3
     hooks:
-    - id: check-yaml
-    - id: check-case-conflict
-    - id: end-of-file-fixer
-    - id: trailing-whitespace
+      - id: check-yaml
+      - id: check-case-conflict
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+  - repo: https://github.com/prettier/prettier
+    rev: master
+    hooks:
+      - id: prettier
