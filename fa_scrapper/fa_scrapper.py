@@ -94,9 +94,9 @@ def pages_from(template):
 
         eof = request.status_code != 200
         if not eof:
-            print("Página {n}".format(n=n), end="\r")
+            print("Page {n}".format(n=n), end="\r")
         else:
-            print("Página {n}. Download complete!".format(n=n - 1))
+            print("Page {n}. Download complete!".format(n=n - 1))
         n += 1
 
 
