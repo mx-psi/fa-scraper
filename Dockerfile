@@ -4,12 +4,6 @@ FROM python:3.7
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
+# Install package
 RUN apt-get -qq update && apt-get -qq install locales locales-all
-
-# Copy project
-COPY Pipfile /
-
-# Install dependencies
-RUN pip3 install pipenv && pipenv lock && pipenv install --system
-
-COPY fa-scrapper.py /
+RUN pip3 install fa-scrapper

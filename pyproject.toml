@@ -1,0 +1,37 @@
+[tool.poetry]
+name = "fa-scrapper"
+version = "0.1.1"
+description = "A Letterboxd-compatible FilmAffinity scrapper."
+license = "GPL-3.0-or-later"
+authors = ["Pablo Baeyens <pbaeyens31+github@gmail.com>"]
+readme = "README.md"
+repository = "https://github.com/mx-psi/fa-scrapper"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: End Users/Desktop",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Topic :: Utilities",
+    "Environment :: Console",
+]
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/mx-psi/fa-scrapper/issues"
+"Changelog" = "https://github.com/mx-psi/fa-scrapper/blob/master/CHANGELOG.md"
+"Authors" = "https://github.com/mx-psi/fa-scrapper/blob/master/AUTHORS"
+
+[tool.poetry.scripts]
+fa-scrapper = "fa_scrapper.cli:main"
+
+[tool.poetry.dependencies]
+python = "^3.5"
+beautifulsoup4 = "^4.9.1"
+requests = "^2.21.0"
+lxml = "^4.5.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
