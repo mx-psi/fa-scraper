@@ -42,10 +42,10 @@ def get_date(tag, lang):
     """Gets date from tag (format YYYY-MM-DD)"""
 
     if lang == "es":
-        date_str = tag.string[len("Votada el día: ") :].strip()
+        date_str = tag.string[len("Votada el día: "):].strip()
         fecha = datetime.strptime(date_str, "%d de %B de %Y").date()
     else:
-        date_str = tag.string[len("Rated on ") :].strip()
+        date_str = tag.string[len("Rated on "):].strip()
         fecha = datetime.strptime(date_str, "%B %d, %Y").date()
 
     return fecha.strftime("%Y-%m-%d")
@@ -61,8 +61,7 @@ def get_directors(tag):
 
     return ", ".join(
         sanitize_director_tag(d)
-        for d in tag.find_all(class_="mc-director")[0].find_all(class_="nb")
-    )
+        for d in tag.find_all(class_="mc-director")[0].find_all(class_="nb"))
 
 
 def is_film(tag, lang):
@@ -100,12 +99,13 @@ def pages_from(template):
 def get_profile_data(user_id, lang):
     """Yields films rated by user given user id"""
 
-    FA = (FA_ROOT_URL + "userratings.php?user_id={id}&p={{}}&orderby=4").format(
-        lang=lang, id=user_id
-    )
+    FA = (FA_ROOT_URL +
+          "userratings.php?user_id={id}&p={{}}&orderby=4").format(lang=lang,
+                                                                  id=user_id)
 
     for page in pages_from(FA):
-        tags = page.find_all(class_=["user-ratings-header", "user-ratings-movie"])
+        tags = page.find_all(
+            class_=["user-ratings-header", "user-ratings-movie"])
         cur_date = None
 
         for tag in tags:
@@ -118,7 +118,8 @@ def get_profile_data(user_id, lang):
                     "Year": title.next_sibling.strip()[1:-1],
                     "Directors": get_directors(tag),
                     "WatchedDate": cur_date,
-                    "Rating": int(tag.find_all(class_="ur-mr-rat")[0].string) / 2,
+                    "Rating":
+                    int(tag.find_all(class_="ur-mr-rat")[0].string) / 2,
                     "Rating10": tag.find_all(class_="ur-mr-rat")[0].string,
                 }
 
@@ -126,9 +127,9 @@ def get_profile_data(user_id, lang):
 def get_list_data(user_id, list_id, lang):
     """Yields films from list given list id"""
 
-    FA = (
-        FA_ROOT_URL + "userlist.php?user_id={user_id}&list_id={list_id}&page={{}}"
-    ).format(lang=lang, user_id=user_id, list_id=list_id)
+    FA = (FA_ROOT_URL +
+          "userlist.php?user_id={user_id}&list_id={list_id}&page={{}}").format(
+              lang=lang, user_id=user_id, list_id=list_id)
 
     for page in pages_from(FA):
         tags = page.find_all(class_=["movie-wrapper"])

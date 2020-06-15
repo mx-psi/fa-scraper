@@ -13,11 +13,14 @@ __version__ = "0.1.0"
 def main():
     """Main function"""
     parser = argparse.ArgumentParser(
-        description="Generates Letterboxd-compatible csv from Filmaffinity user data."
-    )
+        description=
+        "Generates Letterboxd-compatible csv from Filmaffinity user data.")
     parser.add_argument("id", help="User id")
     parser.add_argument("--list", help="List id", metavar="LIST")
-    parser.add_argument("--csv", nargs=1, help="Name of export FILE", metavar="FILE")
+    parser.add_argument("--csv",
+                        nargs=1,
+                        help="Name of export FILE",
+                        metavar="FILE")
     parser.add_argument(
         "--lang",
         nargs=1,
@@ -33,21 +36,16 @@ def main():
         export_file = args.csv[0]
     elif args.list:
         export_file = "filmAffinity_{lang}_{id}_list_{list_id}.csv".format(
-            id=args.id, lang=args.lang[0], list_id=args.list
-        )
+            id=args.id, lang=args.lang[0], list_id=args.list)
     else:
-        export_file = "filmAffinity_{lang}_{id}.csv".format(
-            id=args.id, lang=args.lang[0]
-        )
+        export_file = "filmAffinity_{lang}_{id}.csv".format(id=args.id,
+                                                            lang=args.lang[0])
 
     try:
         set_locale(args.lang[0])
     except locale.Error:
-        print(
-            "Could not set locale for '{lang}' and UTF-8 encoding.".format(
-                lang=args.lang[0]
-            )
-        )
+        print("Could not set locale for '{lang}' and UTF-8 encoding.".format(
+            lang=args.lang[0]))
         manual_locale = input("locale (empty for default): ").strip()
         if manual_locale:
             try:
