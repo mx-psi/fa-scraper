@@ -3,7 +3,7 @@ import argparse
 import locale
 from .fa_scrapper import set_locale, get_list_data, get_profile_data, save_to_csv
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 
 def main():
