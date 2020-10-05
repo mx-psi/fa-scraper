@@ -90,6 +90,7 @@ def pages_from(template):
     while not eof:
         request = requests.get(template.format(n))
         request.encoding = "utf-8"
+
         yield bs4.BeautifulSoup(request.text, "lxml")
 
         eof = request.status_code != 200
@@ -143,6 +144,32 @@ def get_list_data(user_id, list_id, lang):
                 "Year": title.next_sibling.strip()[1:-1],
                 "Directors": get_directors(tag),
             }
+
+
+def get_user_lists(user_id, lang):
+    """Yields all lists from the given user"""
+
+    FA = (FA_ROOT_URL + "userlists.php?user_id={user_id}&p={{}}").format(
+        lang=lang, user_id=user_id
+    )
+
+    for page in pages_from(FA):
+        tags = page.find_all(class_=["list-name-wrapper"])
+        for tag in tags:
+            list_name = tag.text.split("\n")[1]
+            list_name = "".join(w for w in list_name if w.isalnum() or w == " ")
+
+            url = tag.a.get("href")
+            list_id = url[url.find("list_id=") + len("list_id=") :]
+            yield [list_id, list_name]
+
+
+def save_lists_to_csv(user_id, lang, pattern):
+    """Extracts all lists from a user and saves them independently"""
+
+    for user_list in get_user_lists(user_id, lang):
+        films = get_list_data(user_id, user_list[0], lang)
+        save_to_csv(films, pattern.format(user_list[1]))
 
 
 def save_to_csv(films, filename):

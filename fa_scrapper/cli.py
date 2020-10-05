@@ -1,7 +1,13 @@
 import sys
 import argparse
 import locale
-from .fa_scrapper import set_locale, get_list_data, get_profile_data, save_to_csv
+from .fa_scrapper import (
+    set_locale,
+    get_list_data,
+    get_profile_data,
+    save_to_csv,
+    save_lists_to_csv,
+)
 
 __version__ = "0.1.1"
 
@@ -22,6 +28,7 @@ def main():
         default=["en"],
         choices={"es", "en"},
     )
+    parser.add_argument("--all-lists", action="store_true", help="Download all lists")
 
     args = parser.parse_args()
 
@@ -30,6 +37,10 @@ def main():
     elif args.list:
         export_file = "filmAffinity_{lang}_{id}_list_{list_id}.csv".format(
             id=args.id, lang=args.lang[0], list_id=args.list
+        )
+    elif args.all_lists:
+        export_file = "filmAffinity_{lang}_{id}_list_{{}}.csv".format(
+            id=args.id, lang=args.lang[0]
         )
     else:
         export_file = "filmAffinity_{lang}_{id}.csv".format(
@@ -52,13 +63,16 @@ def main():
                 print(e)
                 sys.exit()
 
-    try:
-        if args.list:
-            data = get_list_data(args.id, args.list, args.lang[0])
-        else:
-            data = get_profile_data(args.id, args.lang[0])
-    except ValueError as v:
-        print("Error:", v)
-        sys.exit()
+    if args.all_lists:
+        save_lists_to_csv(args.id, args.lang[0], export_file)
+    else:
+        try:
+            if args.list:
+                data = get_list_data(args.id, args.list, args.lang[0])
+            else:
+                data = get_profile_data(args.id, args.lang[0])
+        except ValueError as v:
+            print("Error:", v)
+            sys.exit()
 
-    save_to_csv(data, export_file)
+        save_to_csv(data, export_file)
