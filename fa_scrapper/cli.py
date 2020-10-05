@@ -1,7 +1,13 @@
 import sys
 import argparse
 import locale
-from .fa_scrapper import set_locale, get_list_data, get_profile_data, save_to_csv, save_lists_to_csv
+from .fa_scrapper import (
+    set_locale,
+    get_list_data,
+    get_profile_data,
+    save_to_csv,
+    save_lists_to_csv,
+)
 
 __version__ = "0.1.1"
 
@@ -22,7 +28,7 @@ def main():
         default=["en"],
         choices={"es", "en"},
     )
-    parser.add_argument("--all", action='store_true', help="Download all lists")
+    parser.add_argument("--all-lists", action="store_true", help="Download all lists")
 
     args = parser.parse_args()
 
@@ -32,7 +38,7 @@ def main():
         export_file = "filmAffinity_{lang}_{id}_list_{list_id}.csv".format(
             id=args.id, lang=args.lang[0], list_id=args.list
         )
-    elif args.all:
+    elif args.all_lists:
         export_file = "filmAffinity_{lang}_{id}_list_{{}}.csv".format(
             id=args.id, lang=args.lang[0]
         )
@@ -57,7 +63,7 @@ def main():
                 print(e)
                 sys.exit()
 
-    if args.all:
+    if args.all_lists:
         save_lists_to_csv(args.id, args.lang[0], export_file)
     else:
         try:
@@ -70,4 +76,3 @@ def main():
             sys.exit()
 
         save_to_csv(data, export_file)
-
