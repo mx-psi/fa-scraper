@@ -167,9 +167,9 @@ def get_user_lists(user_id, lang):
 def save_lists_to_csv(user_id, lang, pattern):
     """Extracts all lists from a user and saves them independently"""
 
-    for list in get_user_lists(user_id, lang):
-        films = get_list_data(user_id, list[0], lang)
-        save_to_csv(films, pattern.format(list[1]))
+    for user_list in get_user_lists(user_id, lang):
+        films = get_list_data(user_id, user_list[0], lang)
+        save_to_csv(films, pattern.format(user_list[1]))
 
 
 def save_to_csv(films, filename):
