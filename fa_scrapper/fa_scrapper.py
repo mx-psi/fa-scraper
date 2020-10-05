@@ -146,27 +146,30 @@ def get_list_data(user_id, list_id, lang):
             }
 
 
-def get_user_lists(user_id,lang):
+def get_user_lists(user_id, lang):
     """Yields all lists from the given user"""
 
-    FA = (
-        FA_ROOT_URL + "userlists.php?user_id={user_id}&p={{}}"
-    ).format(lang=lang, user_id=user_id)
+    FA = (FA_ROOT_URL + "userlists.php?user_id={user_id}&p={{}}").format(
+        lang=lang, user_id=user_id
+    )
 
     for page in pages_from(FA):
         tags = page.find_all(class_=["list-name-wrapper"])
         for tag in tags:
-            #list_name=tag.text.split('\n')[1]      #Could be used in filename
-            url=tag.a.get('href')
-            list_id=url[url.find("list_id=")+len("list_id="):]
-            yield list_id
+            list_name = tag.text.split("\n")[1]
+            list_name = "".join(w for w in list_name if w.isalnum() or w == " ")
+
+            url = tag.a.get("href")
+            list_id = url[url.find("list_id=") + len("list_id=") :]
+            yield [list_id, list_name]
+
 
 def save_lists_to_csv(user_id, lang, pattern):
     """Extracts all lists from a user and saves them independently"""
 
-    for list_id in get_user_lists(user_id,lang):
-        films=get_list_data(user_id,list_id, lang)
-        save_to_csv(films, pattern.format(list_id) )
+    for list in get_user_lists(user_id, lang):
+        films = get_list_data(user_id, list[0], lang)
+        save_to_csv(films, pattern.format(list[1]))
 
 
 def save_to_csv(films, filename):
