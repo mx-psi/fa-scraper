@@ -27,10 +27,14 @@ from enum import Enum
 
 class FACategory(Enum):
     """Enum holding filmaffinity categories"""
-    TVS = auto()
-    TVMS = auto()
-    TV = auto()
-    S = auto()
+    TVS = "TVS"
+    TVMS = "TVMS"
+    TV = "TV"
+    S = "S"
+
+    def __str__(self):
+        """Returns category"""
+        return self.value
 
 # FilmAffinity root URL
 FA_ROOT_URL = "https://www.filmaffinity.com/{lang}/"
@@ -94,7 +98,7 @@ def is_chosen_category(tag, lang, ignore_list):
 
     skip = map(skipdct.get, ignore_list)
 
-    return not any(title.endswith(suffix) for suffix in )
+    return not any(title.endswith(suffix) for suffix in skip)
 
 
 def pages_from(template):
