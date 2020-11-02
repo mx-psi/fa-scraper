@@ -25,9 +25,10 @@ import bs4
 
 from enum import Enum
 
+
 class FACategory(Enum):
     """Enum holding filmaffinity categories"""
-    
+
     TVS = "TVS"
     TVMS = "TVMS"
     TV = "TV"
@@ -89,17 +90,17 @@ def is_chosen_category(tag, lang, ignore_list):
 
     if lang == "es":
         skipdct = {
-            FACategory.TVS : "(Serie de TV)",
+            FACategory.TVS: "(Serie de TV)",
             FACategory.TVMS: "(Miniserie de TV)",
             FACategory.TV: "(TV)",
-            FACategory.S: "(C)"
+            FACategory.S: "(C)",
         }
     else:
         skipdct = {
-            FACategory.TVS : "(TV Series)",
+            FACategory.TVS: "(TV Series)",
             FACategory.TVMS: "(TV Miniseries)",
             FACategory.TV: "(TV)",
-            FACategory.S: "(S)"
+            FACategory.S: "(S)",
         }
 
     skip = map(skipdct.get, ignore_list)
@@ -171,7 +172,7 @@ def get_list_data(user_id, list_id, lang, ignore_list):
                     "Year": title.next_sibling.strip()[1:-1],
                     "Directors": get_directors(tag),
                 }
-                
+
 
 def get_user_lists(user_id, lang):
     """Yields all lists from the given user"""
