@@ -27,6 +27,7 @@ from enum import Enum
 
 class FACategory(Enum):
     """Enum holding filmaffinity categories"""
+    
     TVS = "TVS"
     TVMS = "TVMS"
     TV = "TV"
@@ -35,6 +36,7 @@ class FACategory(Enum):
     def __str__(self):
         """Returns category"""
         return self.value
+
 
 # FilmAffinity root URL
 FA_ROOT_URL = "https://www.filmaffinity.com/{lang}/"
@@ -86,15 +88,19 @@ def is_chosen_category(tag, lang, ignore_list):
     title = tag.find_all(class_="mc-title")[0].a.string.strip()
 
     if lang == "es":
-        skipdct = {FACategory.TVS : "(Serie de TV)",
-                   FACategory.TVMS: "(Miniserie de TV)",
-                   FACategory.TV: "(TV)",
-                   FACategory.S: "(C)"}
+        skipdct = {
+            FACategory.TVS : "(Serie de TV)",
+            FACategory.TVMS: "(Miniserie de TV)",
+            FACategory.TV: "(TV)",
+            FACategory.S: "(C)"
+        }
     else:
-        skipdct = {FACategory.TVS : "(TV Series)",
-                   FACategory.TVMS: "(TV Miniseries)",
-                   FACategory.TV: "(TV)",
-                   FACategory.S: "(S)"}
+        skipdct = {
+            FACategory.TVS : "(TV Series)",
+            FACategory.TVMS: "(TV Miniseries)",
+            FACategory.TV: "(TV)",
+            FACategory.S: "(S)"
+        }
 
     skip = map(skipdct.get, ignore_list)
 
@@ -119,6 +125,7 @@ def pages_from(template):
         else:
             print("Page {n}. Download complete!".format(n=n - 1))
         n += 1
+
 
 def get_profile_data(user_id, lang, ignore_list):
     """Yields films rated by user given user id"""
@@ -145,6 +152,7 @@ def get_profile_data(user_id, lang, ignore_list):
                     "Rating10": tag.find_all(class_="ur-mr-rat")[0].string,
                 }
 
+
 def get_list_data(user_id, list_id, lang, ignore_list):
     """Yields films from list given list id"""
 
@@ -162,7 +170,8 @@ def get_list_data(user_id, list_id, lang, ignore_list):
                     "Title": title.string.strip(),
                     "Year": title.next_sibling.strip()[1:-1],
                     "Directors": get_directors(tag),
-                    }
+                }
+                
 
 def get_user_lists(user_id, lang):
     """Yields all lists from the given user"""
@@ -180,6 +189,7 @@ def get_user_lists(user_id, lang):
             url = tag.a.get("href")
             list_id = url[url.find("list_id=") + len("list_id=") :]
             yield [list_id, list_name]
+
 
 def save_lists_to_csv(user_id, lang, pattern, ignore_list):
     """Extracts all lists from a user and saves them independently"""

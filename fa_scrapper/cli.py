@@ -12,6 +12,7 @@ from .fa_scrapper import (
 
 __version__ = "0.1.1"
 
+
 def main():
     """Main function"""
     parser = argparse.ArgumentParser(
@@ -34,12 +35,12 @@ def main():
         help="Ignore one of the following categories (can be used multiple times): TVS (TV series), TVMS (TV miniseries), TV (TV), S (Short)",
         type=FACategory,
         choices=FACategory,
-        action='append',
+        action="append",
         default=[],
-        )
+    )
 
     args = parser.parse_args()
-    
+
     if args.csv:
         export_file = args.csv[0]
     elif args.list:
