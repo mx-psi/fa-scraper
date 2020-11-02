@@ -31,7 +31,7 @@ def main():
     parser.add_argument("--all-lists", action="store_true", help="Download all lists")
     parser.add_argument(
         "--ignore",
-        help="Ignore a category (can be used multiple times)",
+        help="Ignore one of the following categories (can be used multiple times): TVS (TV series), TVMS (TV miniseries), TV (TV), S (Short)",
         type=FACategory,
         choices=FACategory,
         action='append',
