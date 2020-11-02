@@ -7,10 +7,10 @@ from .fa_scrapper import (
     get_profile_data,
     save_to_csv,
     save_lists_to_csv,
+    FACategory,
 )
 
 __version__ = "0.1.1"
-
 
 def main():
     """Main function"""
@@ -29,9 +29,17 @@ def main():
         choices={"es", "en"},
     )
     parser.add_argument("--all-lists", action="store_true", help="Download all lists")
+    parser.add_argument(
+        "--ignore",
+        help="Ignore a category (can be used multiple times)",
+        type=FACategory,
+        choices=FACategory,
+        action='append',
+        default=[],
+        )
 
     args = parser.parse_args()
-
+    
     if args.csv:
         export_file = args.csv[0]
     elif args.list:
@@ -64,13 +72,13 @@ def main():
                 sys.exit()
 
     if args.all_lists:
-        save_lists_to_csv(args.id, args.lang[0], export_file)
+        save_lists_to_csv(args.id, args.lang[0], export_file, args.ignore)
     else:
         try:
             if args.list:
-                data = get_list_data(args.id, args.list, args.lang[0])
+                data = get_list_data(args.id, args.list, args.lang[0], args.ignore)
             else:
-                data = get_profile_data(args.id, args.lang[0])
+                data = get_profile_data(args.id, args.lang[0], args.ignore)
         except ValueError as v:
             print("Error:", v)
             sys.exit()
