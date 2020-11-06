@@ -27,7 +27,7 @@ from enum import Enum
 
 
 class FACategory(Enum):
-    """Enum holding filmaffinity categories"""
+    """FilmAffinity categories"""
 
     TVS = "TVS"
     TVMS = "TVMS"
