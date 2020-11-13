@@ -23,6 +23,21 @@ import locale
 import requests
 import bs4
 
+from enum import Enum
+
+
+class FACategory(Enum):
+    """FilmAffinity categories"""
+
+    TVS = "TVS"
+    TVMS = "TVMS"
+    TV = "TV"
+    S = "S"
+
+    def __str__(self):
+        """Returns category"""
+        return self.value
+
 
 # FilmAffinity root URL
 FA_ROOT_URL = "https://www.filmaffinity.com/{lang}/"
@@ -68,15 +83,27 @@ def get_directors(tag):
     )
 
 
-def is_film(tag, lang):
-    """Checks if given tag is a film"""
+def is_chosen_category(tag, lang, ignore_list):
+    """Checks if given tag is within the chosen categories"""
 
     title = tag.find_all(class_="mc-title")[0].a.string.strip()
 
     if lang == "es":
-        skip = ["(Serie de TV)", "(Miniserie de TV)", "(TV)", "(C)"]
+        skipdct = {
+            FACategory.TVS: "(Serie de TV)",
+            FACategory.TVMS: "(Miniserie de TV)",
+            FACategory.TV: "(TV)",
+            FACategory.S: "(C)",
+        }
     else:
-        skip = ["(TV Series)", "(TV Miniseries)", "(TV)", "(S)"]
+        skipdct = {
+            FACategory.TVS: "(TV Series)",
+            FACategory.TVMS: "(TV Miniseries)",
+            FACategory.TV: "(TV)",
+            FACategory.S: "(S)",
+        }
+
+    skip = map(skipdct.get, ignore_list)
 
     return not any(title.endswith(suffix) for suffix in skip)
 
@@ -101,7 +128,7 @@ def pages_from(template):
         n += 1
 
 
-def get_profile_data(user_id, lang):
+def get_profile_data(user_id, lang, ignore_list):
     """Yields films rated by user given user id"""
 
     FA = (FA_ROOT_URL + "userratings.php?user_id={id}&p={{}}&orderby=4").format(
@@ -115,7 +142,7 @@ def get_profile_data(user_id, lang):
         for tag in tags:
             if tag["class"] == ["user-ratings-header"]:
                 cur_date = get_date(tag, lang)
-            elif is_film(tag, lang):
+            elif is_chosen_category(tag, lang, ignore_list):
                 title = tag.find_all(class_="mc-title")[0].a
                 yield {
                     "Title": title.string.strip(),
@@ -127,7 +154,7 @@ def get_profile_data(user_id, lang):
                 }
 
 
-def get_list_data(user_id, list_id, lang):
+def get_list_data(user_id, list_id, lang, ignore_list):
     """Yields films from list given list id"""
 
     FA = (
@@ -138,12 +165,13 @@ def get_list_data(user_id, list_id, lang):
         tags = page.find_all(class_=["movie-wrapper"])
 
         for tag in tags:
-            title = tag.find_all(class_="mc-title")[0].a
-            yield {
-                "Title": title.string.strip(),
-                "Year": title.next_sibling.strip()[1:-1],
-                "Directors": get_directors(tag),
-            }
+            if is_chosen_category(tag, lang, ignore_list):
+                title = tag.find_all(class_="mc-title")[0].a
+                yield {
+                    "Title": title.string.strip(),
+                    "Year": title.next_sibling.strip()[1:-1],
+                    "Directors": get_directors(tag),
+                }
 
 
 def get_user_lists(user_id, lang):
@@ -164,11 +192,11 @@ def get_user_lists(user_id, lang):
             yield [list_id, list_name]
 
 
-def save_lists_to_csv(user_id, lang, pattern):
+def save_lists_to_csv(user_id, lang, pattern, ignore_list):
     """Extracts all lists from a user and saves them independently"""
 
     for user_list in get_user_lists(user_id, lang):
-        films = get_list_data(user_id, user_list[0], lang)
+        films = get_list_data(user_id, user_list[0], lang, ignore_list)
         save_to_csv(films, pattern.format(user_list[1]))
 
 
