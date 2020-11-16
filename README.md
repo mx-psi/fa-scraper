@@ -32,8 +32,8 @@ fa-scrapper [--csv FILE] [--lang LANG] id
 You need to install Docker. Once installed, run:
 
 ```sh
-docker build -t fa-image https://github.com/mx-psi/fa-scrapper.git#master
-docker run --name fa-container fa-image fa-scrapper id
+docker docker pull fascrapperdev/fascrapper
+docker run --name fa-container fascrapperdev/fascrapper fa-scrapper id
 docker cp fa-container:/*.csv .
 docker rm fa-container`
 ```
