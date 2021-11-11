@@ -22,7 +22,7 @@ repos:
     rev: "v0.910"
     hooks:
       - id: mypy
-        additional_dependencies: [types-requests]
+        additional_dependencies: [types-requests, types-beautifulsoup4]
   - repo: https://github.com/pycqa/isort
     rev: 5.10.1
     hooks:
