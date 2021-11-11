@@ -24,6 +24,7 @@ import requests
 import bs4
 
 from enum import Enum
+from typing import Iterable, Iterator, Mapping, Any, List
 
 
 class FACategory(Enum):
@@ -43,7 +44,7 @@ class FACategory(Enum):
 FA_ROOT_URL = "https://www.filmaffinity.com/{lang}/"
 
 
-def set_locale(lang):
+def set_locale(lang: str):
     """Attempts to set locale."""
 
     if platform.system() in {"Linux", "Darwin"}:
@@ -56,7 +57,7 @@ def set_locale(lang):
     locale.setlocale(locale.LC_ALL, loc)
 
 
-def get_date(tag, lang):
+def get_date(tag, lang: str) -> str:
     """Gets date from tag (format YYYY-MM-DD)"""
 
     if lang == "es":
@@ -69,7 +70,7 @@ def get_date(tag, lang):
     return fecha.strftime("%Y-%m-%d")
 
 
-def get_directors(tag):
+def get_directors(tag) -> str:
     """Gets directors from a film"""
 
     def sanitize_director_tag(d):
@@ -83,7 +84,7 @@ def get_directors(tag):
     )
 
 
-def is_chosen_category(tag, lang, ignore_list):
+def is_chosen_category(tag, lang: str, ignore_list) -> bool:
     """Checks if given tag is within the chosen categories"""
 
     title = tag.find_all(class_="mc-title")[0].a.string.strip()
@@ -108,7 +109,7 @@ def is_chosen_category(tag, lang, ignore_list):
     return not any(title.endswith(suffix) for suffix in skip)
 
 
-def pages_from(template):
+def pages_from(template: str):
     """Yields pages from a given section until one of them fails."""
 
     eof = False
@@ -128,7 +129,9 @@ def pages_from(template):
         n += 1
 
 
-def get_profile_data(user_id, lang, ignore_list):
+def get_profile_data(
+    user_id: str, lang: str, ignore_list
+) -> Iterator[Mapping[str, Any]]:
     """Yields films rated by user given user id"""
 
     FA = (FA_ROOT_URL + "userratings.php?user_id={id}&p={{}}&orderby=4").format(
@@ -154,7 +157,9 @@ def get_profile_data(user_id, lang, ignore_list):
                 }
 
 
-def get_list_data(user_id, list_id, lang, ignore_list):
+def get_list_data(
+    user_id: str, list_id: str, lang: str, ignore_list: Iterable[str]
+) -> Iterator[Mapping[str, str]]:
     """Yields films from list given list id"""
 
     FA = (
@@ -174,7 +179,7 @@ def get_list_data(user_id, list_id, lang, ignore_list):
                 }
 
 
-def get_user_lists(user_id, lang):
+def get_user_lists(user_id: str, lang: str) -> Iterator[List[str]]:
     """Yields all lists from the given user"""
 
     FA = (FA_ROOT_URL + "userlists.php?user_id={user_id}&p={{}}").format(
@@ -192,7 +197,7 @@ def get_user_lists(user_id, lang):
             yield [list_id, list_name]
 
 
-def save_lists_to_csv(user_id, lang, pattern, ignore_list):
+def save_lists_to_csv(user_id: str, lang: str, pattern: str, ignore_list):
     """Extracts all lists from a user and saves them independently"""
 
     for user_list in get_user_lists(user_id, lang):
@@ -200,7 +205,7 @@ def save_lists_to_csv(user_id, lang, pattern, ignore_list):
         save_to_csv(films, pattern.format(user_list[1]))
 
 
-def save_to_csv(films, filename):
+def save_to_csv(films: Iterator[Mapping[str, Any]], filename: str):
     """Saves films in a csv file"""
 
     with open(filename, "w", newline="") as csvfile:
