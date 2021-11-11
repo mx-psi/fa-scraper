@@ -27,3 +27,9 @@ jobs:
       - name: mypy
         run: |
           mypy --ignore-missing-imports fa_scrapper/
+  isort:
+    runs-on: ubuntu-latest
+    name: isort
+    steps:
+      - name: python-isort
+        uses: isort/isort-action@v0.1.0

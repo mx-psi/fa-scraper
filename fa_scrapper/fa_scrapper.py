@@ -15,16 +15,14 @@
 #
 
 import csv
-
-from datetime import datetime
-import platform
 import locale
-
-import requests
-import bs4
-
+import platform
+from datetime import datetime
 from enum import Enum
-from typing import Iterable, Iterator, Mapping, Any, List
+from typing import Any, Iterable, Iterator, List, Mapping
+
+import bs4
+import requests
 
 
 class FACategory(Enum):
