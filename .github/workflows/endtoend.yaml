@@ -29,6 +29,6 @@ jobs:
       - name: Run fa-scrapper
         env:
           TEST_ACCOUNT_ID: ${{ secrets.TEST_ACCOUNT_ID }}
-        run: poetry run fa-scrapper ${TEST_ACCOUNT_ID} --csv output.csv
+        run: poetry run fa-scrapper $TEST_ACCOUNT_ID --csv output.csv
       - name: Check output
         run: csv-diff output.csv testdata/expected.csv
