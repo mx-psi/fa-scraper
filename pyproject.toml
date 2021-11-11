@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fa-scrapper"
-version = "0.1.1"
+version = "0.2.0"
 description = "A Letterboxd-compatible FilmAffinity scrapper."
 license = "GPL-3.0-or-later"
 authors = ["Pablo Baeyens <pbaeyens31+github@gmail.com>"]
