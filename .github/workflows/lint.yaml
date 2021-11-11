@@ -23,4 +23,4 @@ jobs:
           pip install mypy types-requests
       - name: mypy
         run: |
-          mypy fa_scrapper/
+          mypy --ignore-missing-imports fa_scrapper/
