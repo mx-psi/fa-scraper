@@ -1,0 +1,31 @@
+name: build and test e2e
+on: pull_request
+
+jobs:
+  ci:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.5.10, 3.10.0]
+        poetry-version: ["1.1.11"]
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run image
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: ${{ matrix.poetry-version }}
+      - name: Install fa-scrapper
+        run: poetry install
+      - name: Install csv-diff
+        run: python3 -m pip install csv-diff
+      - name: Run fa-scrapper
+        env:
+          TEST_ACCOUNT_ID: ${{ secrets.TEST_ACCOUNT_ID }}
+        run: poetry run fa-scrapper ${TEST_ACCOUNT_ID} --csv output.csv
+      - name: Check output
+        run: csv-diff output.csv testdata/expected.csv
