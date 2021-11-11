@@ -21,9 +21,11 @@ jobs:
           poetry-version: ${{ matrix.poetry-version }}
       - name: Install fa-scrapper
         run: poetry install
+      - name: Install csv-diff
+        run: python3 -m pip install csv-diff
       - name: Run fa-scrapper
         env:
           TEST_ACCOUNT_ID: ${{ secrets.TEST_ACCOUNT_ID }}
         run: poetry run fa-scrapper ${TEST_ACCOUNT_ID} --csv output.csv
       - name: Check output
-        run: diff output.csv testdata/expected.csv
+        run: csv-diff output.csv testdata/expected.csv
