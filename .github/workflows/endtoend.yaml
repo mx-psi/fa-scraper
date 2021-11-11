@@ -11,7 +11,11 @@ jobs:
       matrix:
         python-version: [3.5.10, 3.10.0]
         poetry-version: ["1.1.11"]
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        exclude:
+          # setup-python does not have Python 3.5 on Windows
+          - os: windows-latest
+            python-version: 3.5.10
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -30,5 +34,6 @@ jobs:
         env:
           TEST_ACCOUNT_ID: ${{ secrets.TEST_ACCOUNT_ID }}
         run: poetry run fa-scrapper ${TEST_ACCOUNT_ID} --csv output.csv
+        shell: bash
       - name: Check output
         run: csv-diff output.csv testdata/expected.csv
