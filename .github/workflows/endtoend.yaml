@@ -6,8 +6,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [3.5, 3.10]
-        poetry-version: [1.1.11]
+        python-version: [3.5.10, 3.10.0]
+        poetry-version: ["1.1.11"]
         os: [ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
@@ -20,7 +20,7 @@ jobs:
         with:
           poetry-version: ${{ matrix.poetry-version }}
       - name: Install fa-scrapper
-        run: poetry build
+        run: poetry install
       - name: Run fa-scrapper
         env:
           TEST_ACCOUNT_ID: ${{ secrets.TEST_ACCOUNT_ID }}
