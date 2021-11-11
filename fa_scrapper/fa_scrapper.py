@@ -47,8 +47,10 @@ FA_ROOT_URL = "https://www.filmaffinity.com/{lang}/"
 def set_locale(lang: str):
     """Attempts to set locale."""
 
-    if platform.system() in {"Linux", "Darwin"}:
+    if platform.system() == "Linux":
         loc = "es_ES.utf8" if lang == "es" else "en_US.utf8"
+    elif platform.system() == "Darwin":
+        loc = "es_ES.UTF-8" if lang == "es" else "en_US.UTF-8"
     elif platform.system() == "Windows":
         loc = "es-ES" if lang == "es" else "en-US"
     else:
