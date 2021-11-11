@@ -52,7 +52,7 @@ def set_locale(lang: str):
     elif platform.system() == "Darwin":
         loc = "es_ES.UTF-8" if lang == "es" else "en_US.UTF-8"
     elif platform.system() == "Windows":
-        loc = "es-ES" if lang == "es" else "en-US"
+        loc = "es_ES" if lang == "es" else "en_US"
     else:
         raise locale.Error()
 
