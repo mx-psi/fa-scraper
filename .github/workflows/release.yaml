@@ -12,16 +12,6 @@ jobs:
       - uses: abatilo/actions-poetry@v2.1.4
         with:
           poetry-version: 1.1.11
-      - id: get_version
-        run: echo "::set-output name=version::$(poetry version)"
-      - id: get_tag
-        run: echo "::set-output tag=${GITHUB_REF/refs\/tags\/v/}"
-      - name: check version
-        if: ${{ steps.get_version.outputs.version != steps.get_tag.outputs.tag }}
-        uses: actions/github-script@v3
-        with:
-          script: |
-            core.setFailed('tag doesn't match poetry version')
       - name: build
         run: poetry build
       - name: release
