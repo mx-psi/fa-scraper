@@ -1,0 +1,30 @@
+on:
+  tags:
+    - "v[0-9]+.[0-9]+.[0-9]+*"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - uses: abatilo/actions-poetry@v2.1.4
+        with:
+          poetry-version: 1.1.11
+      - id: get_version
+        run: echo "::set-output name=version::$(poetry version)"
+      - id: get_tag
+        run: echo "::set-output tag=${GITHUB_REF/refs\/tags\/v/}"
+      - name: check version
+        if: ${{ steps.get_version.outputs.version != steps.get_tag.outputs.tag }}
+        uses: actions/github-script@v3
+        with:
+          script: |
+            core.setFailed('tag doesn't match poetry version')
+      - name: build
+        run: poetry build
+      - name: release
+        env:
+          PYPI_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          PYPI_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        run: poetry publish -n --username ${PYPI_USERNAME} --password ${PYPI_PASSWORD}
