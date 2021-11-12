@@ -25,7 +25,7 @@ jobs:
           pip install mypy types-requests types-beautifulsoup4
       - name: mypy
         run: |
-          mypy --ignore-missing-imports fa_scrapper/
+          mypy --ignore-missing-imports fa_scraper/
   isort:
     runs-on: ubuntu-latest
     name: isort
