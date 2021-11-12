@@ -17,7 +17,7 @@
 import csv
 import platform
 from datetime import datetime
-from typing import Any, Iterable, Iterator, List, Mapping
+from typing import Any, Iterable, Iterator, List, Mapping, Sequence
 
 import arrow
 import bs4
@@ -27,6 +27,21 @@ from .types import FACategory, FAList, Lang, ListId, UserId
 
 # FilmAffinity root URL
 FA_ROOT_URL = "https://www.filmaffinity.com/{lang}/"
+
+FILM_FIELDNAMES = (
+    "Title",
+    "Year",
+    "Directors",
+    "WatchedDate",
+    "Rating",
+    "Rating10",
+)
+
+LIST_FIELDNAMES = (
+    "Title",
+    "Year",
+    "Directors",
+)
 
 
 def get_date(tag: bs4.element.Tag, lang: Lang) -> str:
@@ -188,15 +203,16 @@ def save_lists_to_csv(
 
     for user_list in get_user_lists(user_id, lang):
         films = get_list_data(user_id, user_list.id, lang, ignore_list)
-        save_to_csv(films, pattern.format(user_list.name))
+        save_to_csv(films, LIST_FIELDNAMES, pattern.format(user_list.name))
 
 
-def save_to_csv(films: Iterator[Mapping[str, Any]], filename: str):
+def save_to_csv(
+    dicts: Iterator[Mapping[str, Any]], fieldnames: Sequence[str], filename: str
+):
     """Saves films in a csv file"""
 
     with open(filename, "w", newline="") as csvfile:
-        writer = csv.writer(csvfile)
-        writer.writerow(list(next(films)))
-
-        for film in films:
-            writer.writerow(list(film.values()))
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        for d in dicts:
+            writer.writerow(d)
