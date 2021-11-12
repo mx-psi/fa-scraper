@@ -17,7 +17,7 @@ antes de utilizar el programa para obtener los datos de terceros._
 Puedes instalarlo usando `pip` ([Python 3.5+](https://www.python.org/)):
 
 ```sh
-pip install fa-scrapper
+python3 -m pip install fa-scrapper
 ```
 
 ### Con Docker.
@@ -47,7 +47,7 @@ Ve a tu página de perfil y copia el campo `user_id` de la URL:
 Ve a la página de listas (en el menú de la izquierda) y accede a la lista que
 quieras (necesita ser pública).
 
-Copia el campo `field_id` de la URL:
+Copia el campo `list_id` de la URL:
 
 `filmaffinity.com/es/mylist.php?list_id=`**XXXXXX**
 
@@ -57,6 +57,8 @@ Copia el campo `field_id` de la URL:
 - `--csv FILE` fija el archivo CSV para exportar a `FILE`
 - `--lang LANG` fija el idioma a `LANG`. El importador de Letterboxd funciona
   mejor en inglés (la opción por defecto)
+
+`fa-scrapper --help` muestra otras opciones.
 
 ## Resolución de problemas
 
