@@ -2,7 +2,7 @@ import argparse
 import sys
 
 from . import __version__
-from .fa_scrapper import (
+from .fa_scraper import (
     FILM_FIELDNAMES,
     LIST_FIELDNAMES,
     get_list_data,
@@ -17,7 +17,7 @@ def main():
     """Main function"""
     parser = argparse.ArgumentParser(
         description="Generates Letterboxd-compatible csv from Filmaffinity user data.",
-        prog="fa-scrapper",
+        prog="fa-scraper",
     )
     parser.add_argument("id", help="user id", type=UserId)
     parser.add_argument("--list", help="list id", metavar="LIST", type=ListId)

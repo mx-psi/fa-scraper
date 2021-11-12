@@ -1,6 +1,6 @@
-# How to contribute to `fa-scrapper`
+# How to contribute to `fa-scraper`
 
-fa-scrapper is free software licensed under GNU GPLv3. You are more than welcome
+fa-scraper is free software licensed under GNU GPLv3. You are more than welcome
 to contribute opening Pull Requests to this repo or submitting issues.
 
 ## Submitting issues
@@ -53,10 +53,10 @@ Here are a few tips when making contributions:
 5. Ensure the required status checks pass: if you think they are wrong make a
    comment about it so that I can manually check it.
 
-To build and install locally you can use `poetry install`, then do `poetry run fa-scrapper <options>`.
+To build and install locally you can use `poetry install`, then do `poetry run fa-scraper <options>`.
 
 ## Things that will not be merged
 
 I will **not** merge or implement any feature that makes it significantly easier
-for someone to use fa-scrapper to scrape data from many FilmAffinity users
+for someone to use fa-scraper to scrape data from many FilmAffinity users
 indiscriminately.
