@@ -1,7 +1,14 @@
 import argparse
 import sys
 
-from .fa_scrapper import get_list_data, get_profile_data, save_lists_to_csv, save_to_csv
+from .fa_scrapper import (
+    FILM_FIELDNAMES,
+    LIST_FIELDNAMES,
+    get_list_data,
+    get_profile_data,
+    save_lists_to_csv,
+    save_to_csv,
+)
 from .types import FACategory, Lang, ListId, UserId
 
 __version__ = "0.1.1"
@@ -57,10 +64,12 @@ def main():
         try:
             if args.list:
                 data = get_list_data(args.id, args.list, args.lang[0], args.ignore)
+                fieldnames = LIST_FIELDNAMES
             else:
                 data = get_profile_data(args.id, args.lang[0], args.ignore)
+                fieldnames = FILM_FIELDNAMES
         except ValueError as v:
             print("Error:", v)
             sys.exit()
 
-        save_to_csv(data, export_file)
+        save_to_csv(data, fieldnames, export_file)
