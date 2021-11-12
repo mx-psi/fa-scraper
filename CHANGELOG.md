@@ -1,9 +1,12 @@
 # CHANGELOG
 
-## 0.3.0 (To be released)
+## 0.3.0 (12-11-2021)
 
-- Drop support for Python 3.5
-- Remove usage of system locale
+- (Breaking) Drop support for Python 3.5
+- (Enhancement) Remove usage of system locale
+- (Enhancement) Add `--version` flag
+- (Fixed) Include latest film on export
+- (Fixed) Include script with correct spelling (`fa-scraper`)
 
 ## 0.2.0 (11-11-2021)
 
