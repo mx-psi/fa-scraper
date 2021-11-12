@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.3.0 (To be released)
+
+- Drop support for Python 3.5
+- Remove usage of system locale
+
 ## 0.2.0 (11-11-2021)
 
 - (Fixed) Fix default locale on macOS ([#42][])

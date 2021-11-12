@@ -24,10 +24,11 @@ classifiers = [
 fa-scrapper = "fa_scrapper.cli:main"
 
 [tool.poetry.dependencies]
-python = "^3.5"
+python = "^3.6"
 beautifulsoup4 = "^4.9.1"
 requests = "^2.21.0"
 lxml = "^4.5.1"
+arrow = "^1.2.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.1"

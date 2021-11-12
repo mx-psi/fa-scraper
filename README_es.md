@@ -59,10 +59,3 @@ Copia el campo `list_id` de la URL:
   mejor en inglés (la opción por defecto)
 
 `fa-scrapper --help` muestra otras opciones.
-
-## Resolución de problemas
-
-- `Could not set locale`: El script intenta adivinar tu
-  [locale](<https://en.wikipedia.org/wiki/Locale_(computer_software)>) en tu
-  sistema operativo. Si no lo consigue debes indicarlo tú. En Linux puedes
-  conseguir los locale disponibles ejecutando `locale -a`.

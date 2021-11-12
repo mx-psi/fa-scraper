@@ -66,10 +66,3 @@ You need to copy the `list_id` field from the URL:
   English, the default option.
 
 Run `fa-scrapper --help` to see further options.
-
-## Troubleshooting
-
-- `Could not set locale`: The script attempts to guess your
-  [locale](<https://en.wikipedia.org/wiki/Locale_(computer_software)>) setting
-  given your platform. If it fails to do so you need to provide it yourself. On
-  Linux you can get available locales by running `locale -a` in your terminal.

@@ -15,11 +15,11 @@
 #
 
 import csv
-import locale
 import platform
 from datetime import datetime
 from typing import Any, Iterable, Iterator, List, Mapping
 
+import arrow
 import bs4
 import requests
 
@@ -27,21 +27,6 @@ from .types import FACategory, FAList, Lang, ListId, UserId
 
 # FilmAffinity root URL
 FA_ROOT_URL = "https://www.filmaffinity.com/{lang}/"
-
-
-def set_locale(lang: Lang):
-    """Attempts to set locale."""
-
-    if platform.system() == "Linux":
-        loc = "es_ES.utf8" if lang == Lang.ES else "en_US.utf8"
-    elif platform.system() == "Darwin":
-        loc = "es_ES.UTF-8" if lang == Lang.ES else "en_US.UTF-8"
-    elif platform.system() == "Windows":
-        loc = "es_ES" if lang == Lang.ES else "en_US"
-    else:
-        raise locale.Error()
-
-    locale.setlocale(locale.LC_ALL, loc)
 
 
 def get_date(tag: bs4.element.Tag, lang: Lang) -> str:
@@ -52,10 +37,10 @@ def get_date(tag: bs4.element.Tag, lang: Lang) -> str:
 
     if lang == Lang.ES:
         date_str = tag.string[len("Votada el día: ") :].strip()
-        fecha = datetime.strptime(date_str, "%d de %B de %Y").date()
+        fecha = arrow.get(date_str, "D [de] MMMM [de] YYYY", locale="es_ES").date()
     else:
         date_str = tag.string[len("Rated on ") :].strip()
-        fecha = datetime.strptime(date_str, "%B %d, %Y").date()
+        fecha = arrow.get(date_str, "MMMM D, YYYY", locale="en_US").date()
 
     return fecha.strftime("%Y-%m-%d")
 
@@ -88,7 +73,7 @@ def is_chosen_category(
 
     title = tag.find_all(class_="mc-title")[0].a.string.strip()
 
-    if lang == "es":
+    if lang == Lang.ES:
         skipdct = {
             FACategory.TVS: "(Serie de TV)",
             FACategory.TVMS: "(Miniserie de TV)",
