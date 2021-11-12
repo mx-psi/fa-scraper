@@ -1,4 +1,4 @@
-from fa_scrapper import __version__
+from fa_scraper import __version__
 
 
 def test_version():

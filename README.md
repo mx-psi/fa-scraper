@@ -1,6 +1,6 @@
 # filmAffinity to Letterboxd
 
-(_[Versión en español](https://github.com/mx-psi/fa-scrapper/blob/master/README_es.md)_)
+(_[Versión en español](https://github.com/mx-psi/fa-scraper/blob/master/README_es.md)_)
 
 Generates CSV file compatible with
 [Letterboxd diary importer](https://letterboxd.com/about/importing-data/) from
@@ -15,16 +15,16 @@ from other people._
 
 ### Using `pip`
 
-You can install `fa-scrapper` using `pip` ([Python 3.5+](https://www.python.org)):
+You can install `fa-scraper` using `pip` ([Python 3.5+](https://www.python.org)):
 
 ```sh
-python3 -m pip install fa-scrapper
+python3 -m pip install fa-scraper
 ```
 
 Then run
 
 ```sh
-fa-scrapper [--csv FILE] [--lang LANG] id
+fa-scraper [--csv FILE] [--lang LANG] id
 ```
 
 ### Using Docker
@@ -32,7 +32,7 @@ fa-scrapper [--csv FILE] [--lang LANG] id
 You need to install Docker. Once installed, run:
 
 ```sh
-docker run --name fa-container fascrapperdev/fascrapper fa-scrapper id
+docker run --name fa-container fascraperdev/fascraper fa-scraper id
 docker cp fa-container:/*.csv .
 docker rm fa-container`
 ```
@@ -65,4 +65,4 @@ You need to copy the `list_id` field from the URL:
 - `--lang LANG` sets language to `LANG`. Letterboxd importer works best in
   English, the default option.
 
-Run `fa-scrapper --help` to see further options.
+Run `fa-scraper --help` to see further options.

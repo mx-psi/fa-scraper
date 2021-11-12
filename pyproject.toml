@@ -1,11 +1,11 @@
 [tool.poetry]
-name = "fa-scrapper"
+name = "fa-scraper"
 version = "0.3.0"
-description = "A Letterboxd-compatible FilmAffinity scrapper."
+description = "A Letterboxd-compatible FilmAffinity scraper."
 license = "GPL-3.0-or-later"
 authors = ["Pablo Baeyens <pbaeyens31+github@gmail.com>"]
 readme = "README.md"
-repository = "https://github.com/mx-psi/fa-scrapper"
+repository = "https://github.com/mx-psi/fa-scraper"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: End Users/Desktop",
@@ -16,13 +16,13 @@ classifiers = [
 ]
 
 [tool.poetry.urls]
-"Bug Tracker" = "https://github.com/mx-psi/fa-scrapper/issues"
-"Changelog" = "https://github.com/mx-psi/fa-scrapper/blob/master/CHANGELOG.md"
-"Authors" = "https://github.com/mx-psi/fa-scrapper/blob/master/AUTHORS"
+"Bug Tracker" = "https://github.com/mx-psi/fa-scraper/issues"
+"Changelog" = "https://github.com/mx-psi/fa-scraper/blob/master/CHANGELOG.md"
+"Authors" = "https://github.com/mx-psi/fa-scraper/blob/master/AUTHORS"
 
 [tool.poetry.scripts]
-fa-scrapper = "fa_scrapper.cli:main"
-fa-scraper = "fa_scrapper.cli:main"
+fa-scrapper = "fa_scraper.cli:main"
+fa-scraper = "fa_scraper.cli:main"
 
 [tool.poetry.dependencies]
 python = "^3.6"

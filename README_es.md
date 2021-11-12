@@ -17,7 +17,7 @@ antes de utilizar el programa para obtener los datos de terceros._
 Puedes instalarlo usando `pip` ([Python 3.5+](https://www.python.org/)):
 
 ```sh
-python3 -m pip install fa-scrapper
+python3 -m pip install fa-scraper
 ```
 
 ### Con Docker.
@@ -25,8 +25,8 @@ python3 -m pip install fa-scrapper
 Necesitas instalar Docker. Una vez instalado, ejecuta:
 
 ```sh
-docker build -t fa-image https://github.com/mx-psi/fa-scrapper.git#master
-docker run --name fa-container fa-image fa-scrapper id
+docker build -t fa-image https://github.com/mx-psi/fa-scraper.git#master
+docker run --name fa-container fa-image fa-scraper id
 docker cp fa-container:/*.csv .
 docker rm fa-container`
 ```
@@ -58,4 +58,4 @@ Copia el campo `list_id` de la URL:
 - `--lang LANG` fija el idioma a `LANG`. El importador de Letterboxd funciona
   mejor en inglés (la opción por defecto)
 
-`fa-scrapper --help` muestra otras opciones.
+`fa-scraper --help` muestra otras opciones.
