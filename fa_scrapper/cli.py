@@ -3,13 +3,13 @@ import locale
 import sys
 
 from .fa_scrapper import (
-    FACategory,
     get_list_data,
     get_profile_data,
     save_lists_to_csv,
     save_to_csv,
     set_locale,
 )
+from .types import FACategory, Lang, ListId, UserId
 
 __version__ = "0.1.1"
 
@@ -19,16 +19,17 @@ def main():
     parser = argparse.ArgumentParser(
         description="Generates Letterboxd-compatible csv from Filmaffinity user data."
     )
-    parser.add_argument("id", help="User id")
-    parser.add_argument("--list", help="List id", metavar="LIST")
+    parser.add_argument("id", help="User id", type=UserId)
+    parser.add_argument("--list", help="List id", metavar="LIST", type=ListId)
     parser.add_argument("--csv", nargs=1, help="Name of export FILE", metavar="FILE")
     parser.add_argument(
         "--lang",
         nargs=1,
         help="Language for exporting",
+        type=Lang,
         metavar="LANG",
-        default=["en"],
-        choices={"es", "en"},
+        default=[Lang.EN],
+        choices=Lang,
     )
     parser.add_argument("--all-lists", action="store_true", help="Download all lists")
     parser.add_argument(

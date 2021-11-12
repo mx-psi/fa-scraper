@@ -18,52 +18,39 @@ import csv
 import locale
 import platform
 from datetime import datetime
-from enum import Enum
 from typing import Any, Iterable, Iterator, List, Mapping
 
 import bs4
 import requests
 
-
-class FACategory(Enum):
-    """FilmAffinity categories"""
-
-    TVS = "TVS"
-    TVMS = "TVMS"
-    TV = "TV"
-    S = "S"
-
-    def __str__(self):
-        """Returns category"""
-        return self.value
-
+from .types import FACategory, FAList, Lang, ListId, UserId
 
 # FilmAffinity root URL
 FA_ROOT_URL = "https://www.filmaffinity.com/{lang}/"
 
 
-def set_locale(lang: str):
+def set_locale(lang: Lang):
     """Attempts to set locale."""
 
     if platform.system() == "Linux":
-        loc = "es_ES.utf8" if lang == "es" else "en_US.utf8"
+        loc = "es_ES.utf8" if lang == Lang.ES else "en_US.utf8"
     elif platform.system() == "Darwin":
-        loc = "es_ES.UTF-8" if lang == "es" else "en_US.UTF-8"
+        loc = "es_ES.UTF-8" if lang == Lang.ES else "en_US.UTF-8"
     elif platform.system() == "Windows":
-        loc = "es_ES" if lang == "es" else "en_US"
+        loc = "es_ES" if lang == Lang.ES else "en_US"
     else:
         raise locale.Error()
 
     locale.setlocale(locale.LC_ALL, loc)
 
 
-def get_date(tag: bs4.element.Tag, lang: str) -> str:
+def get_date(tag: bs4.element.Tag, lang: Lang) -> str:
     """Gets date from tag (format YYYY-MM-DD)"""
 
     if not tag.string:
         raise ValueError("Missing date on tag {}".format(tag))
 
-    if lang == "es":
+    if lang == Lang.ES:
         date_str = tag.string[len("Votada el día: ") :].strip()
         fecha = datetime.strptime(date_str, "%d de %B de %Y").date()
     else:
@@ -95,7 +82,7 @@ def get_directors(tag: bs4.element.Tag) -> str:
 
 
 def is_chosen_category(
-    tag: bs4.element.Tag, lang: str, ignore_list: Iterable[FACategory]
+    tag: bs4.element.Tag, lang: Lang, ignore_list: Iterable[FACategory]
 ) -> bool:
     """Checks if given tag is within the chosen categories"""
 
@@ -142,7 +129,7 @@ def pages_from(template: str) -> Iterator[bs4.BeautifulSoup]:
 
 
 def get_profile_data(
-    user_id: str, lang: str, ignore_list: Iterable[FACategory]
+    user_id: UserId, lang: Lang, ignore_list: Iterable[FACategory]
 ) -> Iterator[Mapping[str, Any]]:
     """Yields films rated by user given user id"""
 
@@ -170,7 +157,7 @@ def get_profile_data(
 
 
 def get_list_data(
-    user_id: str, list_id: str, lang: str, ignore_list: Iterable[FACategory]
+    user_id: UserId, list_id: ListId, lang: Lang, ignore_list: Iterable[FACategory]
 ) -> Iterator[Mapping[str, str]]:
     """Yields films from list given list id"""
 
@@ -191,7 +178,7 @@ def get_list_data(
                 }
 
 
-def get_user_lists(user_id: str, lang: str) -> Iterator[List[str]]:
+def get_user_lists(user_id: UserId, lang: Lang) -> Iterator[FAList]:
     """Yields all lists from the given user"""
 
     FA = (FA_ROOT_URL + "userlists.php?user_id={user_id}&p={{}}").format(
@@ -205,18 +192,18 @@ def get_user_lists(user_id: str, lang: str) -> Iterator[List[str]]:
             list_name = "".join(w for w in list_name if w.isalnum() or w == " ")
 
             url = tag.a.get("href")
-            list_id = url[url.find("list_id=") + len("list_id=") :]
-            yield [list_id, list_name]
+            list_id = ListId(url[url.find("list_id=") + len("list_id=") :])
+            yield FAList(list_id, list_name)
 
 
 def save_lists_to_csv(
-    user_id: str, lang: str, pattern: str, ignore_list: Iterable[FACategory]
+    user_id: UserId, lang: Lang, pattern: str, ignore_list: Iterable[FACategory]
 ):
     """Extracts all lists from a user and saves them independently"""
 
     for user_list in get_user_lists(user_id, lang):
-        films = get_list_data(user_id, user_list[0], lang, ignore_list)
-        save_to_csv(films, pattern.format(user_list[1]))
+        films = get_list_data(user_id, user_list.id, lang, ignore_list)
+        save_to_csv(films, pattern.format(user_list.name))
 
 
 def save_to_csv(films: Iterator[Mapping[str, Any]], filename: str):
