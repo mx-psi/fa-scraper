@@ -11,6 +11,7 @@ jobs:
       matrix:
         python-version: [3.6.8, 3.10.0]
         os: [ubuntu-latest, macos-latest, windows-latest]
+        lang: ["es", "en"]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -28,7 +29,11 @@ jobs:
       - name: Run fa-scrapper
         env:
           TEST_ACCOUNT_ID: ${{ secrets.TEST_ACCOUNT_ID }}
-        run: poetry run fa-scrapper ${TEST_ACCOUNT_ID} --csv output.csv
+          FA_LANG: ${{ matrix.lang }}
+        run: poetry run fa-scrapper ${TEST_ACCOUNT_ID} --lang ${FA_LANG} --csv output.csv
         shell: bash
       - name: Check output
-        run: csv-diff output.csv testdata/expected.csv
+        env:
+          FA_LANG: ${{ matrix.lang }}
+        run: csv-diff output.csv testdata/expected-${FA_LANG}.csv
+        shell: bash
