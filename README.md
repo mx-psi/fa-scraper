@@ -15,10 +15,10 @@ from other people._
 
 ### Using `pip`
 
-You can install `fa-scrapper` using `pip` ([Python 3.5+](https://www.python.org/)):
+You can install `fa-scrapper` using `pip` ([Python 3.5+](https://www.python.org)):
 
 ```sh
-pip install fa-scrapper
+python3 -m pip install fa-scrapper
 ```
 
 Then run
@@ -32,7 +32,6 @@ fa-scrapper [--csv FILE] [--lang LANG] id
 You need to install Docker. Once installed, run:
 
 ```sh
-docker docker pull fascrapperdev/fascrapper
 docker run --name fa-container fascrapperdev/fascrapper fa-scrapper id
 docker cp fa-container:/*.csv .
 docker rm fa-container`
@@ -65,6 +64,8 @@ You need to copy the `list_id` field from the URL:
 - `--csv FILE` sets CSV export file name to `FILE`
 - `--lang LANG` sets language to `LANG`. Letterboxd importer works best in
   English, the default option.
+
+Run `fa-scrapper --help` to see further options.
 
 ## Troubleshooting
 
