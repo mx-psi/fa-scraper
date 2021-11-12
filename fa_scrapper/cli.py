@@ -1,6 +1,7 @@
 import argparse
 import sys
 
+from . import __version__
 from .fa_scrapper import (
     FILM_FIELDNAMES,
     LIST_FIELDNAMES,
@@ -11,30 +12,32 @@ from .fa_scrapper import (
 )
 from .types import FACategory, Lang, ListId, UserId
 
-__version__ = "0.1.1"
-
 
 def main():
     """Main function"""
     parser = argparse.ArgumentParser(
-        description="Generates Letterboxd-compatible csv from Filmaffinity user data."
+        description="Generates Letterboxd-compatible csv from Filmaffinity user data.",
+        prog="fa-scrapper",
     )
-    parser.add_argument("id", help="User id", type=UserId)
-    parser.add_argument("--list", help="List id", metavar="LIST", type=ListId)
-    parser.add_argument("--csv", nargs=1, help="Name of export FILE", metavar="FILE")
+    parser.add_argument("id", help="user id", type=UserId)
+    parser.add_argument("--list", help="list id", metavar="LIST", type=ListId)
+    parser.add_argument("--csv", nargs=1, help="name of export FILE", metavar="FILE")
     parser.add_argument(
         "--lang",
         nargs=1,
-        help="Language for exporting",
+        help="language for exporting",
         type=Lang,
         metavar="LANG",
         default=[Lang.EN],
         choices=Lang,
     )
-    parser.add_argument("--all-lists", action="store_true", help="Download all lists")
+    parser.add_argument("--all-lists", action="store_true", help="download all lists")
+    parser.add_argument(
+        "--version", action="version", version="%(prog)s {}".format(__version__)
+    )
     parser.add_argument(
         "--ignore",
-        help="Ignore a category (TVS/TVMS/TV/S). This can be used multiple times. By default, all categories are included.",
+        help="ignore category (default: all)",
         type=FACategory,
         choices=FACategory,
         action="append",
