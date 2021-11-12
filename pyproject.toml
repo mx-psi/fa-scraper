@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fa-scrapper"
-version = "0.2.0"
+version = "0.3.0"
 description = "A Letterboxd-compatible FilmAffinity scrapper."
 license = "GPL-3.0-or-later"
 authors = ["Pablo Baeyens <pbaeyens31+github@gmail.com>"]
@@ -22,6 +22,7 @@ classifiers = [
 
 [tool.poetry.scripts]
 fa-scrapper = "fa_scrapper.cli:main"
+fa-scraper = "fa_scrapper.cli:main"
 
 [tool.poetry.dependencies]
 python = "^3.6"
