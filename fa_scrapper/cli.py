@@ -1,14 +1,7 @@
 import argparse
-import locale
 import sys
 
-from .fa_scrapper import (
-    get_list_data,
-    get_profile_data,
-    save_lists_to_csv,
-    save_to_csv,
-    set_locale,
-)
+from .fa_scrapper import get_list_data, get_profile_data, save_lists_to_csv, save_to_csv
 from .types import FACategory, Lang, ListId, UserId
 
 __version__ = "0.1.1"
@@ -57,22 +50,6 @@ def main():
         export_file = "filmAffinity_{lang}_{id}.csv".format(
             id=args.id, lang=args.lang[0]
         )
-
-    try:
-        set_locale(args.lang[0])
-    except locale.Error:
-        print(
-            "Could not set locale for '{lang}' and UTF-8 encoding.".format(
-                lang=args.lang[0]
-            )
-        )
-        manual_locale = input("locale (empty for default): ").strip()
-        if manual_locale:
-            try:
-                locale.setlocale(locale.LC_ALL, manual_locale)
-            except locale.Error as e:
-                print(e)
-                sys.exit()
 
     if args.all_lists:
         save_lists_to_csv(args.id, args.lang[0], export_file, args.ignore)

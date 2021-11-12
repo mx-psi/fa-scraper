@@ -19,7 +19,7 @@ Keep in mind the following guidelines when submitting a bug report:
    significant like "Same" or "+1".
 3. If possible, do **not** post your user or list id for privacy reasons. If
    they are relevant, I would prefer if you contact me in private.
-4. Provide all relevant context: operating system, locale and Python version.
+4. Provide all relevant context: operating system and Python version.
 
 ### Features
 
