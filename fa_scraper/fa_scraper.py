@@ -209,7 +209,9 @@ def save_to_csv(
 ):
     """Saves films in a csv file"""
 
-    with open(filename, "w", newline="") as csvfile:
+    # Set to UTF-8 to work around Windows error
+    # "'charmap' codec can't encode character".
+    with open(filename, "w", encoding="utf-8", newline="") as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         for d in dicts:
