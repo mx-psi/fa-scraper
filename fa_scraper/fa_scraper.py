@@ -15,8 +15,6 @@
 #
 
 import csv
-import platform
-from datetime import datetime
 from typing import Any, Iterable, Iterator, List, Mapping, Sequence
 
 import arrow
