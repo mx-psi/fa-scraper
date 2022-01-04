@@ -25,7 +25,8 @@ jobs:
       - name: Install fa-scrapper
         run: poetry install
       - name: Install csv-diff
-        run: python3 -m pip install csv-diff
+        # Install csv-diff with https://github.com/simonw/csv-diff/pull/19
+        run: python3 -m pip install git+https://github.com/mikecoop83/csv-diff@c3d32f758343a2ba3737d612e6e906fd9d77322b
       - name: Run fa-scrapper
         env:
           TEST_ACCOUNT_ID: ${{ secrets.TEST_ACCOUNT_ID }}
@@ -35,5 +36,5 @@ jobs:
       - name: Check output
         env:
           FA_LANG: ${{ matrix.lang }}
-        run: csv-diff output.csv testdata/expected-${FA_LANG}.csv
+        run: csv-diff --encoding "utf-8" output.csv testdata/expected-${FA_LANG}.csv
         shell: bash
