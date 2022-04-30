@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <script src="https://cdn.jsdelivr.net/pyodide/v0.20.0/full/pyodide.js"></script>
+  </head>
+  <body>
+    Pyodide test page <br>
+    Open your browser console to see Pyodide output
+    <script type="text/javascript">
+      async function main(){
+        let pyodide = await loadPyodide();
+
+        // Install fa-scraper on the pyodide object
+        await pyodide.loadPackage("micropip");
+        await pyodide.runPythonAsync(`
+            import micropip
+            await micropip.install('fa-scraper')
+        `);
+
+        // Run fa-sraper get_profile_data with a fixed id.
+        let id = 1;
+        let proxy = pyodide.runPython(`
+            import fa_scraper
+            print(f"Using fa-scraper version v{fa_scraper.__version__}")
+            # This does not work yet :(
+            # fa_scraper.get_profile_data(${id}, "en", [])
+        `);
+
+        // Go over proxy films
+        for(let film of proxy){
+            console.log(film);      
+        }
+        // Destroy proxy object for good memory management.
+        proxy.destroy();
+      }
+      main();
+    </script>
+  </body>
+</html>
