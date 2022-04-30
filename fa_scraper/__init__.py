@@ -3,4 +3,6 @@ try:
 except ModuleNotFoundError:
     import importlib_metadata  # type: ignore
 
+from .fa_scraper import get_profile_data
+
 __version__ = importlib_metadata.version(__name__)
