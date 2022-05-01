@@ -15,11 +15,11 @@
 #
 
 import csv
+from dataclasses import dataclass
 from typing import Any, Iterable, Iterator, List, Mapping, Sequence
 
 import arrow
 import bs4
-import requests
 
 from .types import FACategory, FAList, Lang, ListId, UserId
 
@@ -40,6 +40,34 @@ LIST_FIELDNAMES = (
     "Year",
     "Directors",
 )
+
+@dataclass
+class Response:
+    """A minimal HTTP response object for cross-platform support."""
+    text: str
+    status_code: int
+
+def get_request(url: str) -> Response:
+    """Cross-platform GET request given a URL."""
+    import platform
+    if platform.system() == "Emscripten":
+        # Running on Pyodide, therefore we
+        # use XMLHttpRequest for the request.
+        # Ideally we would use fetch but I need
+        # to make everything async for that.
+        #
+        # This comes from `pyodide.open_url`
+        from js import XMLHttpRequest
+        xhr = XMLHttpRequest.new()
+        xhr.open("GET", url, False)
+        xhr.send(None)
+        return Response(text=xhr.response, status_code=xhr.status)
+    else:
+        # Running on a platform supported by requests; use it.
+        import requests
+        response = requests.get(url)
+        response.encoding = "utf-8"
+        return Response(text=response.text, status_code=response.status_code)
 
 
 def get_date(tag: bs4.element.Tag, lang: Lang) -> str:
@@ -113,12 +141,10 @@ def pages_from(template: str) -> Iterator[bs4.BeautifulSoup]:
     n = 1
 
     while not eof:
-        request = requests.get(template.format(n))
-        request.encoding = "utf-8"
+        response = get_request(template.format(n))
+        yield bs4.BeautifulSoup(response.text, "lxml")
 
-        yield bs4.BeautifulSoup(request.text, "lxml")
-
-        eof = request.status_code != 200
+        eof = response.status_code != 200
         if not eof:
             print("Page {n}".format(n=n), end="\r")
         else:
