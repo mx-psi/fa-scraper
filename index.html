@@ -14,22 +14,53 @@
         await pyodide.loadPackage("micropip");
         await pyodide.runPythonAsync(`
             import micropip
-            await micropip.install('fa-scraper')
+            await micropip.install('https://raw.githubusercontent.com/mx-psi/fa-scraper/web/fa_scraper-0.3.2-py3-none-any.whl')
         `);
 
         // Run fa-sraper get_profile_data with a fixed id.
         let id = 1;
         let proxy = pyodide.runPython(`
-            import fa_scraper
-            print(f"Using fa-scraper version v{fa_scraper.__version__}")
-            # This does not work yet :(
-            # fa_scraper.get_profile_data(${id}, "en", [])
+import fa_scraper
+print(f"Using fa-scraper version v{fa_scraper.__version__}")
+# This does not work yet :(
+# fa_scraper.get_profile_data(${id}, "en", [])
+
+from dataclasses import dataclass
+import platform
+
+@dataclass
+class Response:
+    text: str
+    status_code: int
+
+def fetch(url: str) -> Response:
+    """Cross-platform fetch URL."""
+
+    if platform.system() == "Emscripten":
+        # Running on Pyodide, therefore we
+        # use XMLHttpRequest for the request.
+        # Ideally we would use fetch but I need
+        # to make everything async for that.
+        from js import XMLHttpRequest
+        xhr = XMLHttpRequest.new()
+        xhr.open("GET", url, False)
+        xhr.send(None)
+        return Response(text=xhr.response, status_code=xhr.status)
+    else:
+        # Running on a platform supported by requests; use it.
+        import requests
+        response = requests.get(url)
+        response.encoding = "utf-8"
+        return Response(text=response.text, status_code=response.status_code)
+
+fetch("https://raw.githubusercontent.com/mx-psi/fa-scraper/main/.flake8")
         `);
 
         // Go over proxy films
-        for(let film of proxy){
-            console.log(film);      
-        }
+          for(let film of proxy){
+            console.log(film.Title)
+            console.log(film)
+          }
         // Destroy proxy object for good memory management.
         proxy.destroy();
       }
