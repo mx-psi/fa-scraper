@@ -31,4 +31,4 @@ jobs:
     name: isort
     steps:
       - name: python-isort
-        uses: isort/isort-action@v0.1.0
+        uses: isort/isort-action@v1.0.0
