@@ -171,7 +171,7 @@ def get_list_data(
                 title = tag.find_all(class_="mc-title")[0].a
                 yield {
                     "Title": title.string.strip(),
-                    "Year": title.next_sibling.strip()[1:-1],
+                    "Year": int(tag.find_all(class_="mc-year")[-1].string),
                     "Directors": get_directors(tag),
                 }
 
