@@ -146,7 +146,7 @@ def get_profile_data(
                 title = tag.find_all(class_="mc-title")[0].a
                 yield {
                     "Title": title.string.strip(),
-                    "Year": int(tag.find_all(class_="mc-year")[-1].string),
+                    "Year": int(tag.find_all(class_="d-flex")[0].find_all(class_="mc-year")[0].string.strip()),
                     "Directors": get_directors(tag),
                     "WatchedDate": cur_date,
                     "Rating": int(tag.find_all(class_="ur-mr-rat")[0].string) / 2,
@@ -171,7 +171,7 @@ def get_list_data(
                 title = tag.find_all(class_="mc-title")[0].a
                 yield {
                     "Title": title.string.strip(),
-                    "Year": int(tag.find_all(class_="mc-year")[-1].string),
+                    "Year": int(tag.find_all(class_="d-flex")[0].find_all(class_="mc-year")[0].string.strip()),
                     "Directors": get_directors(tag),
                 }
 
