@@ -36,5 +36,10 @@ jobs:
       - name: Check output
         env:
           FA_LANG: ${{ matrix.lang }}
-        run: csv-diff --encoding "utf-8" output.csv testdata/expected-${FA_LANG}.csv
+        run: | 
+          OUTPUT=$(csv-diff --encoding "utf-8" output.csv testdata/expected-${FA_LANG}.csv)
+          if [ -n "$OUTPUT" ]; then
+            echo "$OUTPUT"
+            exit 1
+          fi
         shell: bash
