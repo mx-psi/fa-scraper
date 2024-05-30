@@ -2,8 +2,9 @@
 
 ## Unreleased
 
-- (Enhacement) Print page and title that caused an exception (#xx)
+- (Breaking) Remove option to ignore 'S' (#135)
 - (Breaking) Bump minimum supported Python version to 3.9 (#126)
+- (Enhacement) Print page and title that caused an exception (#133)
 
 ## 0.3.2 (01-05-2022)
 

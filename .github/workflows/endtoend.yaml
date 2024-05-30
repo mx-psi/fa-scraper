@@ -23,7 +23,7 @@ jobs:
         uses: abatilo/actions-poetry@v3.0.0
         with:
           poetry-version: "1.7.1"
-      - name: Install fa-scrappr
+      - name: Install fa-scraper
         run: poetry install
       - name: Install csv-diff
         # Install csv-diff with https://github.com/simonw/csv-diff/pull/19
