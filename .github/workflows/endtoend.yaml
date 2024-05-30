@@ -12,6 +12,7 @@ jobs:
         python-version: ["3.9.13", "3.12.3"]
         os: [ubuntu-latest, macos-latest, windows-latest]
         lang: ["es", "en"]
+        ignore: [false, true]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -22,22 +23,29 @@ jobs:
         uses: abatilo/actions-poetry@v3.0.0
         with:
           poetry-version: "1.7.1"
-      - name: Install fa-scrapper
+      - name: Install fa-scrappr
         run: poetry install
       - name: Install csv-diff
         # Install csv-diff with https://github.com/simonw/csv-diff/pull/19
         run: python3 -m pip install git+https://github.com/mikecoop83/csv-diff@c3d32f758343a2ba3737d612e6e906fd9d77322b
-      - name: Run fa-scrapper
+      - name: Run fa-scraper
         env:
           TEST_ACCOUNT_ID: ${{ secrets.TEST_ACCOUNT_ID }}
           FA_LANG: ${{ matrix.lang }}
-        run: poetry run fa-scrapper ${TEST_ACCOUNT_ID} --lang ${FA_LANG} --csv output.csv
+        run: | 
+          if [ -n ${{ matrix.ignore }} ]; then
+            EXTRA_FLAGS="--ignore TV --ignore TVMS --ignore TVS"
+          fi
+          poetry run fa-scraper ${TEST_ACCOUNT_ID} --lang ${FA_LANG} --csv output.csv ${EXTRA_FLAGS}
         shell: bash
       - name: Check output
         env:
           FA_LANG: ${{ matrix.lang }}
         run: | 
-          OUTPUT=$(csv-diff --encoding "utf-8" output.csv testdata/expected-${FA_LANG}.csv)
+          if [ -n ${{ matrix.ignore }} ]; then
+            SUFFIX="-ignore"
+          fi
+          OUTPUT=$(csv-diff --encoding "utf-8" output.csv testdata/expected-${FA_LANG}${SUFFIX}.csv)
           if [ -n "$OUTPUT" ]; then
             echo "$OUTPUT"
             exit 1
@@ -47,5 +55,5 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: output-${{ matrix.lang }}-${{ matrix.os }}-${{ matrix.python-version }}
+          name: output-${{ matrix.lang }}-${{ matrix.os }}-${{ matrix.python-version }}-${{ matrix.ignore }}
           path: output.csv

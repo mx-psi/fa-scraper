@@ -10,7 +10,6 @@ class FACategory(Enum):
     TVS = "TVS"
     TVMS = "TVMS"
     TV = "TV"
-    S = "S"
 
     def __str__(self):
         """Returns category"""
