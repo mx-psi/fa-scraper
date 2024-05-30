@@ -28,7 +28,7 @@ fa-scraper = "fa_scraper.cli:main"
 python = "^3.9"
 beautifulsoup4 = "^4.9.1"
 requests = "^2.21.0"
-lxml = "^4.5.1"
+lxml = ">=4.5.1,<6.0.0"
 arrow = "^1.2.1"
 
 [tool.poetry.dev-dependencies]
