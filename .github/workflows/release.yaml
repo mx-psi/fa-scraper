@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
-      - uses: abatilo/actions-poetry@v2.3.0
+      - uses: abatilo/actions-poetry@v3.0.0
         with:
           poetry-version: "1.7.1"
       - name: build
