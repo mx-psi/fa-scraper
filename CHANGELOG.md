@@ -1,22 +1,22 @@
 # CHANGELOG
 
-## Unreleased
+## 0.4.0 (2024-05-30)
 
-- (Breaking) Remove option to ignore 'S' (#135)
-- (Breaking) Bump minimum supported Python version to 3.9 (#126)
-- (Enhacement) Print page and title that caused an exception (#133)
+- (Breaking) Remove option to ignore 'S' category ([#135][])
+- (Breaking) Bump minimum supported Python version to 3.9 ([#126][])
+- (Enhacement) Print page and title that caused an exception ([#133][])
 
-## 0.3.2 (01-05-2022)
+## 0.3.2 (2022-05-01)
 
 - (Enhancement) Expose `get_profile_data` function and related types ([#79][])
 - (chore) Various version bumps ([#70][], [#71][], [#74][], [#75][], [#78][])
 
-## 0.3.1 (04-01-2022)
+## 0.3.1 (2022-01-04)
 
 - (Enhancement) Bump `lxml` to 4.7.1, address CVE-2021-43818 ([#64][], [#65][])
 - (Fixed) Fix Windows encoding error when export includes characters outside of CP-1252 ([#67][])
 
-## 0.3.0 (12-11-2021)
+## 0.3.0 (2021-11-12)
 
 - (Breaking) Drop support for Python 3.5
 - (Enhancement) Remove usage of system locale
@@ -24,17 +24,17 @@
 - (Fixed) Include latest film on export
 - (Fixed) Include script with correct spelling (`fa-scraper`)
 
-## 0.2.0 (11-11-2021)
+## 0.2.0 (2021-11-11)
 
 - (Fixed) Fix default locale on macOS ([#42][])
 - (Fixed) Fix default locale on Windows ([#43][])
 - (Added) Add support for exporting lists ([#21][]). Thanks [@Darruko][]!
 
-## 0.1.1 (15-07-2020)
+## 0.1.1 (2020-07-15)
 
 - (Fixed) Update links in README to work on PyPI.
 
-## 0.1.0 (15-07-2020)
+## 0.1.0 (2020-07-15)
 
 - Initial version
 
@@ -51,5 +51,8 @@
 [#75]: https://github.com/mx-psi/fa-scraper/issues/75
 [#78]: https://github.com/mx-psi/fa-scraper/issues/78
 [#79]: https://github.com/mx-psi/fa-scraper/issues/79
+[#126]: https://github.com/mx-psi/fa-scraper/issues/126
+[#133]: https://github.com/mx-psi/fa-scraper/issues/133
+[#135]: https://github.com/mx-psi/fa-scraper/issues/135
 [@Darruko]: https://github.com/Darruko
 [@darruko]: https://github.com/darruko
