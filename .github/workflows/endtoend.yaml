@@ -45,7 +45,11 @@ jobs:
         shell: bash
         continue-on-error: true
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        if: failure()
+        uses: actions/upload-artifact@v4
         with:
-          name: output-${{ matrix.lang }}
+          name: output-${{ matrix.lang }}-${{ matrix.os }}-${{ matrix.python-version }}
           path: output.csv
+      - name: Fail if any step failed
+        if: failure()
+        run: exit 1
