@@ -21,7 +21,7 @@ import arrow
 import bs4
 import requests
 
-from .types import FACategory, FAList, Lang, ListId, UserId
+from .types import FACategory, FAList, Lang, ListId, UserId, Page
 
 # FilmAffinity root URL
 FA_ROOT_URL = "https://www.filmaffinity.com/{lang}/"
@@ -40,6 +40,9 @@ LIST_FIELDNAMES = (
     "Year",
     "Directors",
 )
+
+TITLE_ERROR_TEMPLATE = "Unexpected error while parsing data for title '{title}'"
+PAGE_ERROR_TEMPLATE = "Unexpected error while parsing data on page '{page}'"
 
 
 def get_date(tag: bs4.element.Tag, lang: Lang) -> str:
@@ -106,17 +109,18 @@ def is_chosen_category(
     return not any(title.endswith(suffix) for suffix in skip)
 
 
-def pages_from(template: str) -> Iterator[bs4.BeautifulSoup]:
+def pages_from(template: str) -> Iterator[Page]:
     """Yields pages from a given section until one of them fails."""
 
     eof = False
     n = 1
 
     while not eof:
-        request = requests.get(template.format(n))
+        url = template.format(n)
+        request = requests.get(url)
         request.encoding = "utf-8"
 
-        yield bs4.BeautifulSoup(request.text, "lxml")
+        yield Page(url=url, contents=bs4.BeautifulSoup(request.text, "lxml"))
 
         eof = request.status_code != 200
         if not eof:
@@ -136,26 +140,37 @@ def get_profile_data(
     )
 
     for page in pages_from(FA):
-        tags = page.find_all(class_=["user-ratings-header", "user-ratings-movie"])
-        cur_date = None
+        try:
+            tags = page.contents.find_all(
+                class_=["user-ratings-header", "user-ratings-movie"]
+            )
+            cur_date = None
 
-        for tag in tags:
-            if tag["class"] == ["user-ratings-header"]:
-                cur_date = get_date(tag, lang)
-            elif is_chosen_category(tag, lang, ignore_list):
-                title = tag.find_all(class_="mc-title")[0].a
-                yield {
-                    "Title": title.string.strip(),
-                    "Year": int(
-                        tag.find_all(class_="d-flex")[0]
-                        .find_all(class_="mc-year")[0]
-                        .string.strip()
-                    ),
-                    "Directors": get_directors(tag),
-                    "WatchedDate": cur_date,
-                    "Rating": int(tag.find_all(class_="ur-mr-rat")[0].string) / 2,
-                    "Rating10": tag.find_all(class_="ur-mr-rat")[0].string,
-                }
+            for tag in tags:
+                if tag["class"] == ["user-ratings-header"]:
+                    cur_date = get_date(tag, lang)
+                elif is_chosen_category(tag, lang, ignore_list):
+                    try:
+                        title = tag.find_all(class_="mc-title")[0].a
+                        yield {
+                            "Title": title.string.strip(),
+                            "Year": int(
+                                tag.find_all(class_="d-flex")[0]
+                                .find_all(class_="mc-year")[0]
+                                .string.strip()
+                            ),
+                            "Directors": get_directors(tag),
+                            "WatchedDate": cur_date,
+                            "Rating": int(tag.find_all(class_="ur-mr-rat")[0].string)
+                            / 2,
+                            "Rating10": tag.find_all(class_="ur-mr-rat")[0].string,
+                        }
+                    except:
+                        print(TITLE_ERROR_TEMPLATE.format(title=title.string.strip()))
+                        raise
+        except:
+            print(PAGE_ERROR_TEMPLATE.format(page=page.url))
+            raise
 
 
 def get_list_data(
@@ -168,20 +183,28 @@ def get_list_data(
     ).format(lang=lang, user_id=user_id, list_id=list_id)
 
     for page in pages_from(FA):
-        tags = page.find_all(class_=["movie-wrapper"])
+        try:
+            tags = page.contents.find_all(class_=["movie-wrapper"])
 
-        for tag in tags:
-            if is_chosen_category(tag, lang, ignore_list):
-                title = tag.find_all(class_="mc-title")[0].a
-                yield {
-                    "Title": title.string.strip(),
-                    "Year": int(
-                        tag.find_all(class_="d-flex")[0]
-                        .find_all(class_="mc-year")[0]
-                        .string.strip()
-                    ),
-                    "Directors": get_directors(tag),
-                }
+            for tag in tags:
+                if is_chosen_category(tag, lang, ignore_list):
+                    try:
+                        title = tag.find_all(class_="mc-title")[0].a
+                        yield {
+                            "Title": title.string.strip(),
+                            "Year": int(
+                                tag.find_all(class_="d-flex")[0]
+                                .find_all(class_="mc-year")[0]
+                                .string.strip()
+                            ),
+                            "Directors": get_directors(tag),
+                        }
+                    except:
+                        print(TITLE_ERROR_TEMPLATE.format(title=title.string.strip()))
+                        raise
+        except:
+            print(PAGE_ERROR_TEMPLATE.format(page=page.url))
+            raise
 
 
 def get_user_lists(user_id: UserId, lang: Lang) -> Iterator[FAList]:
@@ -192,14 +215,18 @@ def get_user_lists(user_id: UserId, lang: Lang) -> Iterator[FAList]:
     )
 
     for page in pages_from(FA):
-        tags = page.find_all(class_=["list-name-wrapper"])
-        for tag in tags:
-            list_name = tag.text.split("\n")[1]
-            list_name = "".join(w for w in list_name if w.isalnum() or w == " ")
+        try:
+            tags = page.contents.find_all(class_=["list-name-wrapper"])
+            for tag in tags:
+                list_name = tag.text.split("\n")[1]
+                list_name = "".join(w for w in list_name if w.isalnum() or w == " ")
 
-            url = tag.a.get("href")
-            list_id = ListId(url[url.find("list_id=") + len("list_id=") :])
-            yield FAList(list_id, list_name)
+                url = tag.a.get("href")
+                list_id = ListId(url[url.find("list_id=") + len("list_id=") :])
+                yield FAList(list_id, list_name)
+        except:
+            print(PAGE_ERROR_TEMPLATE.format(page=page.url))
+            raise
 
 
 def save_lists_to_csv(
