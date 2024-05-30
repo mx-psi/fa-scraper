@@ -1,5 +1,7 @@
 from enum import Enum
 from typing import NamedTuple, NewType
+from dataclasses import dataclass
+import bs4
 
 
 class FACategory(Enum):
@@ -29,3 +31,9 @@ class Lang(Enum):
 UserId = NewType("UserId", str)
 ListId = NewType("ListId", str)
 FAList = NamedTuple("FAList", [("id", ListId), ("name", str)])
+
+
+@dataclass
+class Page:
+    url: str
+    contents: bs4.BeautifulSoup

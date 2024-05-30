@@ -2,7 +2,8 @@
 
 ## Unreleased
 
-- Bump minimum supported Python version to 3.9 (#126)
+- (Enhacement) Print page and title that caused an exception (#xx)
+- (Breaking) Bump minimum supported Python version to 3.9 (#126)
 
 ## 0.3.2 (01-05-2022)
 
