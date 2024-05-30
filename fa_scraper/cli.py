@@ -37,7 +37,7 @@ def main():
     )
     parser.add_argument(
         "--ignore",
-        help="ignore category (default: all)",
+        help="ignore category (default: none)",
         type=FACategory,
         choices=FACategory,
         action="append",

@@ -41,8 +41,22 @@ LIST_FIELDNAMES = (
     "Directors",
 )
 
+SKIP_BY_LANG = {
+    Lang.ES: {
+        FACategory.TVS: "Serie",
+        FACategory.TVMS: "Miniserie",
+        FACategory.TV: "TV",
+    },
+    Lang.EN: {
+        FACategory.TVS: "tv series",
+        FACategory.TVMS: "miniseries",
+        FACategory.TV: "TV",
+    },
+}
+
 TITLE_ERROR_TEMPLATE = "Unexpected error while parsing data for title '{title}'"
 PAGE_ERROR_TEMPLATE = "Unexpected error while parsing data on page '{page}'"
+SKIP_TITLE_TEMPLATE = "Skipping {title} since it is a '{title_type}'"
 
 
 def get_date(tag: bs4.element.Tag, lang: Lang) -> str:
@@ -82,31 +96,14 @@ def get_directors(tag: bs4.element.Tag) -> str:
     )
 
 
-def is_chosen_category(
-    tag: bs4.element.Tag, lang: Lang, ignore_list: Iterable[FACategory]
+def should_skip_type(
+    title_type: str, lang: Lang, ignore_list: Iterable[FACategory]
 ) -> bool:
-    """Checks if given tag is within the chosen categories"""
-
-    title = tag.find_all(class_="mc-title")[0].a.string.strip()
-
-    if lang == Lang.ES:
-        skipdct = {
-            FACategory.TVS: "(Serie de TV)",
-            FACategory.TVMS: "(Miniserie de TV)",
-            FACategory.TV: "(TV)",
-            FACategory.S: "(C)",
-        }
-    else:
-        skipdct = {
-            FACategory.TVS: "(TV Series)",
-            FACategory.TVMS: "(TV Miniseries)",
-            FACategory.TV: "(TV)",
-            FACategory.S: "(S)",
-        }
-
-    skip = map(skipdct.get, ignore_list)
-
-    return not any(title.endswith(suffix) for suffix in skip)
+    """Checks if given title type should be skipped."""
+    for category in ignore_list:
+        if title_type == SKIP_BY_LANG[lang][category]:
+            return True
+    return False
 
 
 def pages_from(template: str) -> Iterator[Page]:
@@ -149,9 +146,24 @@ def get_profile_data(
             for tag in tags:
                 if tag["class"] == ["user-ratings-header"]:
                     cur_date = get_date(tag, lang)
-                elif is_chosen_category(tag, lang, ignore_list):
+                else:
                     try:
                         title = tag.find_all(class_="mc-title")[0].a
+                        title_name = title.string.strip()
+                        title_type = tag.find_all(class_="d-flex")[0].find_all(
+                            class_="type"
+                        )
+                        if title_type and should_skip_type(
+                            title_type[0].string.strip(), lang, ignore_list
+                        ):
+                            print(
+                                SKIP_TITLE_TEMPLATE.format(
+                                    title=title_name,
+                                    title_type=title_type[0].string.strip(),
+                                )
+                            )
+                            continue
+
                         yield {
                             "Title": title.string.strip(),
                             "Year": int(
@@ -187,21 +199,35 @@ def get_list_data(
             tags = page.contents.find_all(class_=["movie-wrapper"])
 
             for tag in tags:
-                if is_chosen_category(tag, lang, ignore_list):
-                    try:
-                        title = tag.find_all(class_="mc-title")[0].a
-                        yield {
-                            "Title": title.string.strip(),
-                            "Year": int(
-                                tag.find_all(class_="d-flex")[0]
-                                .find_all(class_="mc-year")[0]
-                                .string.strip()
-                            ),
-                            "Directors": get_directors(tag),
-                        }
-                    except:
-                        print(TITLE_ERROR_TEMPLATE.format(title=title.string.strip()))
-                        raise
+                try:
+                    title = tag.find_all(class_="mc-title")[0].a
+                    title_name = title.string.strip()
+                    title_type = tag.find_all(class_="d-flex")[0].find_all(
+                        class_="type"
+                    )
+                    if title_type and should_skip_type(
+                        title_type[0].string.strip(), lang, ignore_list
+                    ):
+                        print(
+                            SKIP_TITLE_TEMPLATE.format(
+                                title=title_name,
+                                title_type=title_type[0].string.strip(),
+                            )
+                        )
+                        continue
+
+                    yield {
+                        "Title": title_name,
+                        "Year": int(
+                            tag.find_all(class_="d-flex")[0]
+                            .find_all(class_="mc-year")[0]
+                            .string.strip()
+                        ),
+                        "Directors": get_directors(tag),
+                    }
+                except:
+                    print(TITLE_ERROR_TEMPLATE.format(title=title_name))
+                    raise
         except:
             print(PAGE_ERROR_TEMPLATE.format(page=page.url))
             raise
