@@ -146,7 +146,11 @@ def get_profile_data(
                 title = tag.find_all(class_="mc-title")[0].a
                 yield {
                     "Title": title.string.strip(),
-                    "Year": int(tag.find_all(class_="d-flex")[0].find_all(class_="mc-year")[0].string.strip()),
+                    "Year": int(
+                        tag.find_all(class_="d-flex")[0]
+                        .find_all(class_="mc-year")[0]
+                        .string.strip()
+                    ),
                     "Directors": get_directors(tag),
                     "WatchedDate": cur_date,
                     "Rating": int(tag.find_all(class_="ur-mr-rat")[0].string) / 2,
@@ -156,7 +160,7 @@ def get_profile_data(
 
 def get_list_data(
     user_id: UserId, list_id: ListId, lang: Lang, ignore_list: Iterable[FACategory]
-) -> Iterator[Mapping[str, str]]:
+) -> Iterator[Mapping[str, Any]]:
     """Yields films from list given list id"""
 
     FA = (
@@ -171,7 +175,11 @@ def get_list_data(
                 title = tag.find_all(class_="mc-title")[0].a
                 yield {
                     "Title": title.string.strip(),
-                    "Year": int(tag.find_all(class_="d-flex")[0].find_all(class_="mc-year")[0].string.strip()),
+                    "Year": int(
+                        tag.find_all(class_="d-flex")[0]
+                        .find_all(class_="mc-year")[0]
+                        .string.strip()
+                    ),
                     "Directors": get_directors(tag),
                 }
 
