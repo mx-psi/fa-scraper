@@ -49,6 +49,3 @@ jobs:
         with:
           name: output-${{ matrix.lang }}-${{ matrix.os }}-${{ matrix.python-version }}
           path: output.csv
-      - name: Fail if any step failed
-        if: failure()
-        run: exit 1
