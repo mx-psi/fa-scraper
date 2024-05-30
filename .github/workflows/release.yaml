@@ -16,6 +16,5 @@ jobs:
         run: poetry build
       - name: release
         env:
-          PYPI_USERNAME: ${{ secrets.PYPI_USERNAME }}
-          PYPI_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-        run: poetry publish -n --username ${PYPI_USERNAME} --password ${PYPI_PASSWORD}
+          PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
+        run: poetry publish -n --username __token__ --password ${PYPI_API_TOKEN}
