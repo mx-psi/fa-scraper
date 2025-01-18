@@ -219,7 +219,8 @@ def get_list_data(
                     yield {
                         "Title": title_name,
                         "Year": int(
-                            tag.find_all(class_="d-flex")[0]
+                            tag.find_all(class_="fa-card")[0]
+                            .find_all(class_="d-flex")[0]
                             .find_all(class_="mc-year")[0]
                             .string.strip()
                         ),
