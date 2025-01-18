@@ -132,15 +132,13 @@ def get_profile_data(
 ) -> Iterator[Mapping[str, Any]]:
     """Yields films rated by user given user id"""
 
-    FA = (FA_ROOT_URL + "userratings.php?user_id={id}&p={{}}&orderby=rating-date&chv=list").format(
-        lang=lang, id=user_id
-    )
+    FA = (
+        FA_ROOT_URL + "userratings.php?user_id={id}&p={{}}&orderby=rating-date&chv=list"
+    ).format(lang=lang, id=user_id)
 
     for page in pages_from(FA):
         try:
-            ratings_on_a_date = page.contents.find_all(
-                class_=["fa-content-card"]
-            )
+            ratings_on_a_date = page.contents.find_all(class_=["fa-content-card"])
             cur_date = None
 
             for ratings in ratings_on_a_date:
@@ -153,12 +151,16 @@ def get_profile_data(
                         title_name = title.string.strip()
                         title_type = tag.find_all(class_="types-wrapper")
                         if title_type and should_skip_type(
-                                title_type[0].find_all(class_="type")[0].string.strip(), lang, ignore_list
+                            title_type[0].find_all(class_="type")[0].string.strip(),
+                            lang,
+                            ignore_list,
                         ):
                             print(
                                 SKIP_TITLE_TEMPLATE.format(
                                     title=title_name,
-                                    title_type=title_type[0].find_all(class_="type")[0].string.strip(),
+                                    title_type=title_type[0]
+                                    .find_all(class_="type")[0]
+                                    .string.strip(),
                                 )
                             )
                             continue
@@ -173,9 +175,13 @@ def get_profile_data(
                             ),
                             "Directors": get_directors(tag),
                             "WatchedDate": cur_date,
-                            "Rating": int(tag.find_all(class_="fa-user-rat-box")[0].string)
+                            "Rating": int(
+                                tag.find_all(class_="fa-user-rat-box")[0].string
+                            )
                             / 2,
-                            "Rating10": tag.find_all(class_="fa-user-rat-box")[0].string.strip(),
+                            "Rating10": tag.find_all(class_="fa-user-rat-box")[
+                                0
+                            ].string.strip(),
                         }
                     except:
                         print(TITLE_ERROR_TEMPLATE.format(title=title.string.strip()))
