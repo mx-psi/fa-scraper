@@ -66,10 +66,10 @@ def get_date(tag: bs4.element.Tag, lang: Lang) -> str:
         raise ValueError("Missing date on tag {}".format(tag))
 
     if lang == Lang.ES:
-        date_str = tag.string[len("Votada el día: ") :].strip()
+        date_str = tag.string[len("votada ") :].strip()
         fecha = arrow.get(date_str, "D [de] MMMM [de] YYYY", locale="es_ES").date()
     else:
-        date_str = tag.string[len("Rated on ") :].strip()
+        date_str = tag.string[len("Rated ") :].strip()
         fecha = arrow.get(date_str, "MMMM D, YYYY", locale="en_US").date()
 
     return fecha.strftime("%Y-%m-%d")
@@ -132,34 +132,33 @@ def get_profile_data(
 ) -> Iterator[Mapping[str, Any]]:
     """Yields films rated by user given user id"""
 
-    FA = (FA_ROOT_URL + "userratings.php?user_id={id}&p={{}}&orderby=4").format(
+    FA = (FA_ROOT_URL + "userratings.php?user_id={id}&p={{}}&orderby=rating-date&chv=list").format(
         lang=lang, id=user_id
     )
 
     for page in pages_from(FA):
         try:
-            tags = page.contents.find_all(
-                class_=["user-ratings-header", "user-ratings-movie"]
+            ratings_on_a_date = page.contents.find_all(
+                class_=["fa-content-card"]
             )
             cur_date = None
 
-            for tag in tags:
-                if tag["class"] == ["user-ratings-header"]:
-                    cur_date = get_date(tag, lang)
-                else:
+            for ratings in ratings_on_a_date:
+
+                cur_date = get_date(ratings.find_all(class_="card-header")[0], lang)
+                tags = ratings.find_all(class_="row mb-4")
+                for tag in tags:
                     try:
                         title = tag.find_all(class_="mc-title")[0].a
                         title_name = title.string.strip()
-                        title_type = tag.find_all(class_="d-flex")[0].find_all(
-                            class_="type"
-                        )
+                        title_type = tag.find_all(class_="types-wrapper")
                         if title_type and should_skip_type(
-                            title_type[0].string.strip(), lang, ignore_list
+                                title_type[0].find_all(class_="type")[0].string.strip(), lang, ignore_list
                         ):
                             print(
                                 SKIP_TITLE_TEMPLATE.format(
                                     title=title_name,
-                                    title_type=title_type[0].string.strip(),
+                                    title_type=title_type[0].find_all(class_="type")[0].string.strip(),
                                 )
                             )
                             continue
@@ -167,15 +166,16 @@ def get_profile_data(
                         yield {
                             "Title": title.string.strip(),
                             "Year": int(
-                                tag.find_all(class_="d-flex")[0]
+                                tag.find_all(class_="fa-card")[0]
+                                .find_all(class_="d-flex")[0]
                                 .find_all(class_="mc-year")[0]
                                 .string.strip()
                             ),
                             "Directors": get_directors(tag),
                             "WatchedDate": cur_date,
-                            "Rating": int(tag.find_all(class_="ur-mr-rat")[0].string)
+                            "Rating": int(tag.find_all(class_="fa-user-rat-box")[0].string)
                             / 2,
-                            "Rating10": tag.find_all(class_="ur-mr-rat")[0].string,
+                            "Rating10": tag.find_all(class_="fa-user-rat-box")[0].string.strip(),
                         }
                     except:
                         print(TITLE_ERROR_TEMPLATE.format(title=title.string.strip()))
