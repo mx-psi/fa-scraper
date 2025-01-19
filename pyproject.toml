@@ -1,11 +1,13 @@
-[tool.poetry]
+[project]
 name = "fa-scraper"
 version = "0.4.0"
+requires-python = ">=3.9"
 description = "A Letterboxd-compatible FilmAffinity scraper."
-license = "GPL-3.0-or-later"
-authors = ["Pablo Baeyens <pbaeyens31+github@gmail.com>"]
+license =  { text = "GPL-3.0-or-later" }
+authors = [
+    { name = "Pablo Baeyens", email = "pbaeyens31+github@gmail.com" }
+]
 readme = "README.md"
-repository = "https://github.com/mx-psi/fa-scraper"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: End Users/Desktop",
@@ -14,24 +16,24 @@ classifiers = [
     "Topic :: Utilities",
     "Environment :: Console",
 ]
+dependencies = [
+    "beautifulsoup4>=4.9.1, <5.0",
+    "requests>=2.21.0, <3.0",
+    "lxml>=4.5.1, <6.0.0",
+    "arrow>=1.2.1, <2.0"
+]
 
-[tool.poetry.urls]
-"Bug Tracker" = "https://github.com/mx-psi/fa-scraper/issues"
-"Changelog" = "https://github.com/mx-psi/fa-scraper/blob/master/CHANGELOG.md"
-"Authors" = "https://github.com/mx-psi/fa-scraper/blob/master/AUTHORS"
+[project.urls]
+repository = "https://github.com/mx-psi/fa-scraper"
+issues = "https://github.com/mx-psi/fa-scraper/issues"
+changelog = "https://github.com/mx-psi/fa-scraper/blob/main/CHANGELOG.md"
+authors = "https://github.com/mx-psi/fa-scraper/blob/main/AUTHORS"
 
-[tool.poetry.scripts]
+[project.scripts]
 fa-scrapper = "fa_scraper.cli:main"
 fa-scraper = "fa_scraper.cli:main"
 
-[tool.poetry.dependencies]
-python = "^3.9"
-beautifulsoup4 = "^4.9.1"
-requests = "^2.21.0"
-lxml = ">=4.5.1,<6.0.0"
-arrow = "^1.2.1"
-
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 pytest = "^8.3"
 
 [build-system]

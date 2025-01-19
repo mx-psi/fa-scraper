@@ -13,7 +13,7 @@ jobs:
           python-version: "3.13.1"
       - uses: abatilo/actions-poetry@v3.0.1
         with:
-          poetry-version: "1.7.1"
+          poetry-version: "2.0.1"
       - name: build
         run: poetry build
       - name: release

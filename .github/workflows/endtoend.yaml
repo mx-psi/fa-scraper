@@ -22,7 +22,7 @@ jobs:
       - name: Run image
         uses: abatilo/actions-poetry@v3.0.1
         with:
-          poetry-version: "1.7.1"
+          poetry-version: "2.0.1"
       - name: Install fa-scraper
         run: poetry install
       - name: Install csv-diff
