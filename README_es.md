@@ -14,7 +14,7 @@ antes de utilizar el programa para obtener los datos de terceros._
 
 ### Con `pip`
 
-Puedes instalarlo usando `pip` ([Python 3.5+](https://www.python.org/)):
+Puedes instalarlo usando `pip` ([Python 3.9+](https://www.python.org/)):
 
 ```sh
 python3 -m pip install fa-scraper
