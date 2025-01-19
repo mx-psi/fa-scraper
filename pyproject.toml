@@ -1,6 +1,6 @@
 [project]
 name = "fa-scraper"
-version = "0.4.0"
+version = "0.4.1"
 requires-python = ">=3.9"
 description = "A Letterboxd-compatible FilmAffinity scraper."
 license =  { text = "GPL-3.0-or-later" }

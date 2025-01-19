@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 0.4.1 (2025-01-19)
+
+- (chore) Fix release workflow ([#136][])
+- (chore) Test with Python 3.13 ([#156][])
+- (chore) Migrate to Poetry 2.x ([#157][])
+- (Fixed) Solve issues after new page format ([#153][]). Thanks [@DiegoAsterio][]!
+- (Fixed) Solve issues with list-only scraper ([#153][]). Thanks [@DiegoAsterio][]!
+
 ## 0.4.0 (2024-05-30)
 
 - (Breaking) Remove option to ignore 'S' category ([#135][])
@@ -54,5 +62,10 @@
 [#126]: https://github.com/mx-psi/fa-scraper/issues/126
 [#133]: https://github.com/mx-psi/fa-scraper/issues/133
 [#135]: https://github.com/mx-psi/fa-scraper/issues/135
+[#136]: https://github.com/mx-psi/fa-scraper/issues/136
+[#153]: https://github.com/mx-psi/fa-scraper/issues/153
+[#156]: https://github.com/mx-psi/fa-scraper/issues/156
+[#157]: https://github.com/mx-psi/fa-scraper/issues/157
 [@Darruko]: https://github.com/Darruko
+[@DiegoAsterio]: https://github.com/DiegoAsterio
 [@darruko]: https://github.com/darruko
