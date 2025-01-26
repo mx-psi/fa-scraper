@@ -24,10 +24,10 @@ dependencies = [
 ]
 
 [project.urls]
-repository = "https://github.com/mx-psi/fa-scraper"
-issues = "https://github.com/mx-psi/fa-scraper/issues"
-changelog = "https://github.com/mx-psi/fa-scraper/blob/main/CHANGELOG.md"
-authors = "https://github.com/mx-psi/fa-scraper/blob/main/AUTHORS"
+Repository = "https://github.com/mx-psi/fa-scraper"
+Issues = "https://github.com/mx-psi/fa-scraper/issues"
+Changelog = "https://github.com/mx-psi/fa-scraper/blob/main/CHANGELOG.md"
+Authors = "https://github.com/mx-psi/fa-scraper/blob/main/AUTHORS"
 
 [project.scripts]
 fa-scrapper = "fa_scraper.cli:main"
