@@ -19,7 +19,7 @@ from typing import Any, Iterable, Iterator, List, Mapping, Sequence
 
 import arrow
 import bs4
-import requests
+import cloudscraper
 
 from .types import FACategory, FAList, Lang, ListId, UserId, Page
 
@@ -58,6 +58,7 @@ TITLE_ERROR_TEMPLATE = "Unexpected error while parsing data for title '{title}'"
 PAGE_ERROR_TEMPLATE = "Unexpected error while parsing data on page '{page}'"
 SKIP_TITLE_TEMPLATE = "Skipping {title} since it is a '{title_type}'"
 
+scraper = cloudscraper.create_scraper()
 
 def get_date(tag: bs4.element.Tag, lang: Lang) -> str:
     """Gets date from tag (format YYYY-MM-DD)"""
@@ -114,7 +115,7 @@ def pages_from(template: str) -> Iterator[Page]:
 
     while not eof:
         url = template.format(n)
-        request = requests.get(url)
+        request = scraper.get(url)
         request.encoding = "utf-8"
 
         yield Page(url=url, contents=bs4.BeautifulSoup(request.text, "lxml"))
