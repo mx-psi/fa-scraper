@@ -35,7 +35,7 @@ fa-scrapper = "fa_scraper.cli:main"
 fa-scraper = "fa_scraper.cli:main"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^8.3"
+pytest = "^8.4"
 
 [build-system]
 requires = ["poetry>=0.12"]
