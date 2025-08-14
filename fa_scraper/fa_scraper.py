@@ -60,6 +60,7 @@ SKIP_TITLE_TEMPLATE = "Skipping {title} since it is a '{title_type}'"
 
 scraper = cloudscraper.create_scraper()
 
+
 def get_date(tag: bs4.element.Tag, lang: Lang) -> str:
     """Gets date from tag (format YYYY-MM-DD)"""
 
