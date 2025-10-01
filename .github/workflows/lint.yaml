@@ -10,14 +10,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
       - uses: psf/black@main
   mypy:
     runs-on: ubuntu-latest
     name: Mypy
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.13.1"
       - name: Install Dependencies
@@ -37,7 +37,7 @@ jobs:
     name: poetry check
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12.3"
       - uses: abatilo/actions-poetry@v4.0.0
