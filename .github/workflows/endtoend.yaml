@@ -53,7 +53,7 @@ jobs:
         shell: bash
       - name: Upload artifacts
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: output-${{ matrix.lang }}-${{ matrix.os }}-${{ matrix.python-version }}-${{ matrix.ignore }}
           path: output.csv
