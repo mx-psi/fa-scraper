@@ -9,14 +9,14 @@ jobs:
   black:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-python@v5
       - uses: psf/black@main
   mypy:
     runs-on: ubuntu-latest
     name: Mypy
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13.1"
@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     name: poetry check
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12.3"
